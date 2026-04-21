@@ -34,7 +34,6 @@
             padding: 0;
         }
 
-        /* Animated Parallax Background */
         body::before {
             content: '';
             position: fixed;
@@ -52,14 +51,8 @@
         }
 
         @keyframes gradientShift {
-            0%, 100% {
-                opacity: 1;
-                filter: brightness(1);
-            }
-            50% {
-                opacity: 0.8;
-                filter: brightness(1.1);
-            }
+            0%, 100% { opacity: 1; filter: brightness(1); }
+            50% { opacity: 0.8; filter: brightness(1.1); }
         }
 
         body::after {
@@ -79,12 +72,8 @@
         }
 
         @keyframes floatBg {
-            0%, 100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            50% {
-                transform: translateX(-50%) translateY(20px);
-            }
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(20px); }
         }
 
         .page-wrapper {
@@ -194,9 +183,7 @@
             font-size: clamp(0.85rem, 2vw, 1rem);
         }
 
-        .form-control::placeholder {
-            color: rgba(255,255,255,0.65);
-        }
+        .form-control::placeholder { color: rgba(255,255,255,0.65); }
 
         .btn-primary, .btn-secondary {
             border-radius: 12px;
@@ -206,9 +193,7 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .btn-primary:hover, .btn-secondary:hover {
-            transform: translateY(-2px);
-        }
+        .btn-primary:hover, .btn-secondary:hover { transform: translateY(-2px); }
 
         .auth-toggle {
             display: flex;
@@ -268,32 +253,22 @@
         .card-header-custom {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px;
+            padding: clamp(16px, 2vw, 20px);
             font-weight: bold;
+            font-size: clamp(0.95rem, 2vw, 1.2em);
             border-radius: 20px 20px 0 0;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .card-body {
-            padding: 25px;
-        }
+        .card-body { padding: clamp(18px, 3vw, 25px); }
 
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: clamp(10px, 2vw, 16px);
-            margin-top: clamp(12px, 2vw, 16px);
-            align-items: stretch;
-        }
-
-        .dashboard-grid > div {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: auto;
-            max-height: 260px;
+            grid-template-columns: repeat(auto-fit, minmax(clamp(250px, 90vw, 350px), 1fr));
+            gap: clamp(16px, 3vw, 24px);
+            margin-top: 30px;
         }
 
         .status-badge {
@@ -306,13 +281,8 @@
             font-weight: 600;
         }
 
-        .status-badge.connected {
-            background: rgba(76,175,80,0.18);
-        }
-
-        .status-badge.disconnected {
-            background: rgba(244,67,54,0.18);
-        }
+        .status-badge.connected { background: rgba(76,175,80,0.18); }
+        .status-badge.disconnected { background: rgba(244,67,54,0.18); }
 
         .overview-row {
             display: grid;
@@ -331,52 +301,6 @@
             flex-direction: column;
             justify-content: center;
             gap: 10px;
-        }
-
-        .overview-card h3 {
-            margin-bottom: 0;
-            font-size: clamp(0.7rem, 1.2vw, 0.95rem);
-            color: rgba(255,255,255,0.72);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
-        }
-
-        .overview-card p {
-            font-size: clamp(1.8rem, 5vw, 2.4rem);
-            font-weight: 800;
-            color: #eef2ff;
-            margin: 0;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(clamp(250px, 90vw, 350px), 1fr));
-            gap: clamp(16px, 3vw, 24px);
-            margin-top: 30px;
-        }
-
-        .card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 20px;
-            box-shadow: 0 20px 80px rgba(0,0,0,0.28);
-        }
-
-        .card-header-custom {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: clamp(16px, 2vw, 20px);
-            font-weight: bold;
-            font-size: clamp(0.95rem, 2vw, 1.2em);
-            border-radius: 20px 20px 0 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-body {
-            padding: clamp(18px, 3vw, 25px);
         }
 
         .status-indicator {
@@ -399,26 +323,6 @@
             box-shadow: 0 0 12px rgba(248,113,113,0.35);
         }
 
-        .control-title {
-            margin-bottom: 16px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .sensor-value {
-            font-size: 2.4rem;
-            font-weight: 800;
-            color: #eef2ff;
-            margin-top: 10px;
-        }
-
-        .sensor-unit {
-            font-size: 0.9rem;
-            color: rgba(255,255,255,0.7);
-            margin-left: 6px;
-        }
-
         .mode-btn {
             flex: 1;
             padding: 12px 16px;
@@ -435,9 +339,7 @@
             border-color: #667eea;
         }
 
-        .mode-btn:hover {
-            transform: translateY(-1px);
-        }
+        .mode-btn:hover { transform: translateY(-1px); }
 
         .btn-control {
             width: 100%;
@@ -456,37 +358,7 @@
         .btn-led-on { background: linear-gradient(135deg,#fbbf24,#f59e0b); color: #fff; }
         .btn-led-off { background: linear-gradient(135deg,#6b7280,#374151); color: #fff; }
 
-        .login-topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 22px;
-        }
-
-        .login-topbar span { color: rgba(255,255,255,0.72); }
-
         .hidden { display: none !important; }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 35px;
-        }
-
-        .login-header h1 {
-            color: #ffffff;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .login-header p {
-            color: rgba(255,255,255,0.68);
-            font-size: 1rem;
-        }
-
-        .small-text {
-            color: rgba(255,255,255,0.68);
-            font-size: 0.9rem;
-        }
 
         .app-header {
             display: flex;
@@ -497,10 +369,7 @@
             gap: 18px;
         }
 
-        .app-header h1 {
-            font-size: 2rem;
-            color: #eef2ff;
-        }
+        .app-header h1 { font-size: 2rem; color: #eef2ff; }
 
         .user-info {
             display: flex;
@@ -527,7 +396,6 @@
             animation: rainDrop 1.5s ease-in-out infinite;
         }
 
-        /* Toggle Switch Styles */
         .toggle-switch {
             position: relative;
             display: inline-block;
@@ -535,19 +403,12 @@
             height: 26px;
         }
 
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
 
         .toggle-slider {
             position: absolute;
             cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background-color: rgba(0, 217, 217, 0.3);
             transition: 0.3s;
             border-radius: 26px;
@@ -571,32 +432,17 @@
             border-color: #4caf50;
         }
 
-        input:checked + .toggle-slider:before {
-            transform: translateX(24px);
-        }
+        input:checked + .toggle-slider:before { transform: translateX(24px); }
 
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Mobile Phones (320px - 768px) - AGGRESSIVE MOBILE FIRST */
         @media (max-width: 768px) {
-            * {
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            html, body {
-                width: 100% !important;
-                overflow-x: hidden !important;
-                max-width: 100% !important;
-            }
-
-            body {
-                padding: 0 !important;
-                font-size: 13px;
-            }
+            * { margin: 0 !important; padding: 0 !important; }
+            html, body { width: 100% !important; overflow-x: hidden !important; max-width: 100% !important; }
+            body { padding: 0 !important; font-size: 13px; }
 
             .page-wrapper {
                 min-height: 100vh;
@@ -614,24 +460,14 @@
                 border-radius: 10px;
             }
 
-            .auth-card {
-                padding: 0;
-            }
+            .auth-card { padding: 0; }
 
             .auth-card .left-panel,
-            .auth-card .right-panel {
-                padding: 12px 10px !important;
-            }
+            .auth-card .right-panel { padding: 12px 10px !important; }
 
-            .auth-card h2 {
-                font-size: 1.1rem;
-                margin-bottom: 6px;
-            }
+            .auth-card h2 { font-size: 1.1rem; margin-bottom: 6px; }
 
-            .form-control {
-                font-size: 16px;
-                padding: 10px 10px !important;
-            }
+            .form-control { font-size: 16px; padding: 10px 10px !important; }
 
             .btn-primary, .btn-secondary {
                 width: 100%;
@@ -639,7 +475,6 @@
                 font-size: 0.9rem;
             }
 
-            /* DASHBOARD CONTAINER MOBILE FIX */
             .dashboard-container {
                 width: 100% !important;
                 min-height: 100vh !important;
@@ -660,7 +495,6 @@
                 max-width: 100% !important;
             }
 
-            /* Header Stack */
             [style*="display: flex; justify-content: space-between; align-items: flex-start"] {
                 display: flex !important;
                 flex-direction: column !important;
@@ -675,7 +509,6 @@
                 justify-content: center !important;
             }
 
-            /* Force single column for all grids */
             [style*="grid-template-columns: 1fr 1fr 1fr 1fr"],
             [style*="grid-template-columns: repeat(3, 1fr)"],
             [style*="grid-template-columns: repeat(auto-fit"],
@@ -687,7 +520,6 @@
                 width: 100% !important;
             }
 
-            /* Account info section */
             [style*="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr"] {
                 display: grid !important;
                 grid-template-columns: 1fr !important;
@@ -695,21 +527,18 @@
                 max-width: 100% !important;
             }
 
-            /* Sensor data section */
             [style*="display: grid; grid-template-columns: repeat(3"] {
                 display: grid !important;
                 grid-template-columns: 1fr !important;
                 gap: 8px !important;
             }
 
-            /* Three column layout */
             [style*="display: grid; grid-template-columns: repeat(3, 1fr); gap"] {
                 display: grid !important;
                 grid-template-columns: 1fr !important;
                 gap: 8px !important;
             }
 
-            /* Dashboard cards padding - reduce all clamp and fixed padding */
             [style*="padding: clamp"],
             [style*="padding: 10px"],
             [style*="padding: 12px"],
@@ -718,17 +547,10 @@
             [style*="padding: 18px"],
             [style*="padding: 20px"],
             [style*="padding: 24px"],
-            [style*="padding: 25px"] {
-                padding: 6px !important;
-            }
+            [style*="padding: 25px"] { padding: 6px !important; }
 
-            /* Reduce all font sizes */
-            h1, h2, h3, h4, h5, h6 {
-                font-size: 0.9rem !important;
-                margin: 0 !important;
-            }
+            h1, h2, h3, h4, h5, h6 { font-size: 0.9rem !important; margin: 0 !important; }
 
-            /* Reduce all gaps and margins */
             [style*="gap:"],
             [style*="gap "],
             [style*="margin-bottom:"],
@@ -739,7 +561,6 @@
                 margin: 0 !important;
             }
 
-            /* Status pills */
             [style*="background: rgba(76,175,80,0.85); color: #fff; padding: 8px 16px"],
             [style*="background: rgba(255,67,54,0.85); border: none; color: #fff; padding: 8px 16px"] {
                 padding: 6px 8px !important;
@@ -747,12 +568,8 @@
                 white-space: normal !important;
             }
 
-            /* User info */
-            [style*="color: rgba(255,255,255,0.85); font-weight: 600"] {
-                font-size: 0.8rem !important;
-            }
+            [style*="color: rgba(255,255,255,0.85); font-weight: 600"] { font-size: 0.8rem !important; }
 
-            /* Buttons - all types */
             button[style*="padding:"],
             button[style*="padding "] {
                 padding: 6px 8px !important;
@@ -760,17 +577,12 @@
                 margin: 2px !important;
             }
 
-            /* Mode buttons */
             button[style*="flex: 1"] {
                 padding: 6px 6px !important;
                 font-size: 0.65rem !important;
             }
 
-            /* Toggle switches - make smaller on mobile */
-            .toggle-switch {
-                width: 36px !important;
-                height: 20px !important;
-            }
+            .toggle-switch { width: 36px !important; height: 20px !important; }
 
             .toggle-slider:before {
                 height: 16px !important;
@@ -779,122 +591,60 @@
                 bottom: 2px !important;
             }
 
-            input:checked + .toggle-slider:before {
-                transform: translateX(20px) !important;
-            }
+            input:checked + .toggle-slider:before { transform: translateX(20px) !important; }
 
-            /* Text in cards */
             [style*="font-size: 0.95rem"],
             [style*="font-size: 1rem"],
             [style*="font-size: 1.1rem"],
             [style*="font-size: 1.2rem"],
             [style*="font-size: 1.3rem"],
-            [style*="font-size: 1.5rem"] {
-                font-size: 0.75rem !important;
-            }
+            [style*="font-size: 1.5rem"] { font-size: 0.75rem !important; }
 
             [style*="font-size: 1.8rem"],
             [style*="font-size: 2rem"],
-            [style*="font-size: 2.2rem"] {
-                font-size: 1rem !important;
-            }
+            [style*="font-size: 2.2rem"] { font-size: 1rem !important; }
 
-            [style*="font-size: 3rem"] {
-                font-size: 1.3rem !important;
-            }
+            [style*="font-size: 3rem"] { font-size: 1.3rem !important; }
 
-            /* Padding on cards */
             [style*="padding: 18px"],
             [style*="padding: 20px"],
-            [style*="padding: 25px"] {
-                padding: 8px !important;
-            }
+            [style*="padding: 25px"] { padding: 8px !important; }
 
-            /* Gaps */
             [style*="gap: 16px"],
             [style*="gap: 18px"],
             [style*="gap: 32px"],
-            [style*="gap: clamp"] {
-                gap: 6px !important;
-            }
+            [style*="gap: clamp"] { gap: 6px !important; }
 
-            [style*="gap: 12px"] {
-                gap: 6px !important;
-            }
+            [style*="gap: 12px"] { gap: 6px !important; }
 
-            /* Activity log */
-            #activityLog {
-                max-height: 80px !important;
-                font-size: 0.7rem !important;
-            }
+            #activityLog { max-height: 80px !important; font-size: 0.7rem !important; }
 
-            /* Margins */
             [style*="margin-bottom: clamp"],
             [style*="margin-bottom: 28px"],
-            [style*="margin-bottom: 25px"] {
-                margin-bottom: 8px !important;
-            }
+            [style*="margin-bottom: 25px"] { margin-bottom: 8px !important; }
 
             [style*="margin-bottom: 0"],
-            [style*="margin: 0"] {
-                margin: 0 !important;
-            }
+            [style*="margin: 0"] { margin: 0 !important; }
         }
 
-        /* Tablets (769px - 1024px) */
         @media (max-width: 1024px) and (min-width: 769px) {
-            .page-wrapper {
-                padding: clamp(12px, 4vw, 20px);
-            }
-
-            .auth-card, .dashboard-container {
-                max-width: 100%;
-            }
-
-            .overview-row {
-                grid-template-columns: 1fr;
-            }
-
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .app-header {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .app-header h1 {
-                width: 100%;
-                font-size: 1.5rem;
-            }
-
-            .user-info {
-                width: 100%;
-                justify-content: center;
-            }
+            .page-wrapper { padding: clamp(12px, 4vw, 20px); }
+            .auth-card, .dashboard-container { max-width: 100%; }
+            .overview-row { grid-template-columns: 1fr; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .app-header { flex-direction: column; text-align: center; }
+            .app-header h1 { width: 100%; font-size: 1.5rem; }
+            .user-info { width: 100%; justify-content: center; }
         }
 
-        /* Large Tablets & Small Desktops (1025px - 1440px) */
         @media (min-width: 1025px) and (max-width: 1440px) {
-            .page-wrapper {
-                padding: clamp(20px, 5vw, 30px);
-            }
-
-            .dashboard-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .page-wrapper { padding: clamp(20px, 5vw, 30px); }
+            .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
-        /* Desktop (1441px and above) */
         @media (min-width: 1441px) {
-            .page-wrapper {
-                padding: clamp(30px, 5vw, 50px);
-            }
-
-            .dashboard-grid {
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            }
+            .page-wrapper { padding: clamp(30px, 5vw, 50px); }
+            .dashboard-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
         }
 
         .login-navigation {
@@ -926,10 +676,8 @@
             box-sizing: border-box;
             background: linear-gradient(135deg, #0f1729 0%, #1a2749 100%);
         }
-        
-        .dashboard-container.active {
-            display: flex !important;
-        }
+
+        .dashboard-container.active { display: flex !important; }
 
         .dashboard-inner {
             width: 100%;
@@ -946,7 +694,6 @@
             max-width: 100%;
         }
 
-        /* Ensure all direct children don't overflow */
         .dashboard-inner > * {
             width: 100%;
             max-width: 100%;
@@ -979,7 +726,7 @@
 
                         <button onclick="loginUser()" style="width: 100%; padding: 14px; background: #00d9d9; color: #0a0f1a; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; letter-spacing: 1px; cursor: pointer; text-transform: uppercase; margin-bottom: 20px; transition: all 0.3s ease;">✓ LOG IN</button>
 
-                        <div id="authMessage" class="auth-message" style="margin-bottom: 20px;"></div>
+                        <div id="loginAuthMessage" class="auth-message" style="margin-bottom: 20px;"></div>
 
                         <div style="text-align: center;">
                             <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin: 0;">Don't have an account? <button onclick="switchAuthTab('register')" style="background: none; border: none; color: #00d9d9; cursor: pointer; font-weight: 700; text-decoration: underline; padding: 0; font-size: 0.9rem;">Sign up here</button></p>
@@ -1016,7 +763,7 @@
 
                         <button onclick="registerUser()" style="width: 100%; padding: 14px; background: #00d9d9; color: #0a0f1a; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; letter-spacing: 1px; cursor: pointer; text-transform: uppercase; margin-bottom: 20px; transition: all 0.3s ease;">✓ SIGN UP</button>
 
-                        <div id="authMessage" class="auth-message" style="margin-bottom: 20px;"></div>
+                        <div id="registerAuthMessage" class="auth-message" style="margin-bottom: 20px;"></div>
 
                         <div style="text-align: center;">
                             <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin: 0;">Already have an account? <button onclick="switchAuthTab('login')" style="background: none; border: none; color: #00d9d9; cursor: pointer; font-weight: 700; text-decoration: underline; padding: 0; font-size: 0.9rem;">Log in here</button></p>
@@ -1171,15 +918,13 @@
 
         const authScreen = document.getElementById('authScreen');
         const appScreen = document.getElementById('appScreen');
-        const signedInUser = document.getElementById('signedInUser');
-        const authMessage = document.getElementById('authMessage');
+
         let dashboardListenersInitialized = false;
-        
-        // Device session management
         let currentDeviceId = null;
-        let pendingLoginUser = null;
-        const MAX_CONCURRENT_USERS = 1;
-        
+
+        // ─── FIX: single flag that blocks onAuthStateChanged during active login/register ───
+        let isAuthInProgress = false;
+
         function generateDeviceId() {
             let deviceId = localStorage.getItem('deviceId');
             if (!deviceId) {
@@ -1188,32 +933,35 @@
             }
             return deviceId;
         }
-        
+
         currentDeviceId = generateDeviceId();
-        
-        let isAuthStateChangeHandled = false;
-        let isLoginInProgress = false;
-        
+
         function switchAuthTab(tab) {
             document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
             document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
-            clearAuthMessage(); 
+            clearAuthMessage();
         }
 
         function showAuthMessage(message, type = 'error') {
-            const authMessages = document.querySelectorAll('#authMessage');
-            authMessages.forEach(authMessage => {
-                authMessage.textContent = message;
-                authMessage.className = 'auth-message ' + (type === 'success' ? 'auth-success' : 'auth-error');
-                authMessage.style.display = 'block';
-            });
+            // Show message in whichever form is currently visible
+            const loginMsg = document.getElementById('loginAuthMessage');
+            const registerMsg = document.getElementById('registerAuthMessage');
+            const target = document.getElementById('registerForm').classList.contains('hidden') ? loginMsg : registerMsg;
+            if (target) {
+                target.textContent = message;
+                target.className = 'auth-message ' + (type === 'success' ? 'auth-success' : 'auth-error');
+                target.style.display = 'block';
+            }
         }
 
         function clearAuthMessage() {
-            authMessage.style.display = 'none';
-            authMessage.textContent = '';
+            document.getElementById('loginAuthMessage').style.display = 'none';
+            document.getElementById('loginAuthMessage').textContent = '';
+            document.getElementById('registerAuthMessage').style.display = 'none';
+            document.getElementById('registerAuthMessage').textContent = '';
         }
 
+        // ─── FIX: loginUser sets isAuthInProgress = true before signing in ───
         function loginUser() {
             clearAuthMessage();
             const email = document.getElementById('loginEmail').value.trim();
@@ -1222,23 +970,25 @@
                 showAuthMessage('Please enter both email and password.');
                 return;
             }
+            isAuthInProgress = true; // block onAuthStateChanged
             auth.signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    const user = userCredential.user;
-                    showDashboard(user);
+                    showDashboard(userCredential.user);
                 })
                 .catch((error) => {
-                    showAuthMessage(`${error.code}: ${error.message}` || 'Login failed.');
+                    isAuthInProgress = false; // unblock on failure
+                    showAuthMessage(error.message || 'Login failed.');
                 });
         }
 
+        // ─── FIX: registerUser also sets isAuthInProgress = true ───
         function registerUser() {
             clearAuthMessage();
             const email = document.getElementById('registerEmail').value.trim();
             const username = document.getElementById('registerUsername').value.trim();
             const password = document.getElementById('registerPassword').value;
             const confirmPassword = document.getElementById('registerConfirmPassword').value;
-            
+
             if (!email || !username || !password || !confirmPassword) {
                 showAuthMessage('Please fill in all registration fields.');
                 return;
@@ -1247,7 +997,8 @@
                 showAuthMessage('Passwords do not match.');
                 return;
             }
-            
+
+            isAuthInProgress = true; // block onAuthStateChanged
             auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     const user = userCredential.user;
@@ -1261,36 +1012,30 @@
                     showDashboard(user);
                 })
                 .catch((error) => {
-                    showAuthMessage(`${error.code}: ${error.message}` || 'Registration failed.');
+                    isAuthInProgress = false; // unblock on failure
+                    showAuthMessage(error.message || 'Registration failed.');
                 });
         }
 
         function logoutUser() {
             const user = auth.currentUser;
-            
-            // Remove user from database
             if (user) {
                 database.ref('/system/currentUser').remove();
             }
-            
-            // Stop all sensor listeners
+
             database.ref('/temperature').off();
             database.ref('/humidity').off();
             database.ref('/lightStatus').off();
             database.ref('/rainStatus').off();
             database.ref('/umbrellaState').off();
             database.ref('/mode').off();
-            
-            // Reset state
+
             dashboardListenersInitialized = false;
-            
-            // Sign out from Firebase
+
             auth.signOut().then(() => {
                 showAuthScreen();
                 showAuthMessage('Logged out successfully.', 'success');
                 switchAuthTab('login');
-                
-                // Clear all input fields
                 document.getElementById('loginEmail').value = '';
                 document.getElementById('loginPassword').value = '';
                 document.getElementById('registerEmail').value = '';
@@ -1302,69 +1047,58 @@
                 showAuthMessage(error.message || 'Logout failed.');
             });
         }
-        
-        function forceSignOutOtherUsers() {
-            // Removed - no longer needed
-            return;
-        }
 
         function showDashboard(user) {
             try {
-                // Hide auth screens
                 const pageWrapper = document.querySelector('.page-wrapper');
                 if (pageWrapper) pageWrapper.style.display = 'none';
                 authScreen.style.display = 'none';
-                
-                // Show dashboard using class
+
                 appScreen.classList.add('active');
                 appScreen.style.display = 'flex';
-                
+
                 const email = user.email || 'User';
                 const username = email.split('@')[0] || 'User';
-                
-                // Update user info
+
                 const signedInUserElem = document.getElementById('signedInUser');
                 if (signedInUserElem) signedInUserElem.textContent = username;
-                
+
                 const accountUsernameElem = document.getElementById('accountUsername');
                 if (accountUsernameElem) accountUsernameElem.textContent = username;
-                
+
                 const accountEmailElem = document.getElementById('accountEmail');
                 if (accountEmailElem) accountEmailElem.textContent = email;
-                
-                const createdDate = new Date(user.metadata.creationTime).toLocaleString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric'
+
+                const createdDate = new Date(user.metadata.creationTime).toLocaleString('en-US', {
+                    year: 'numeric', month: 'long', day: 'numeric'
                 });
                 const accountCreatedElem = document.getElementById('accountCreated');
                 if (accountCreatedElem) accountCreatedElem.textContent = createdDate;
-                
+
                 const initTime = document.getElementById('initTime');
                 if (initTime) {
                     initTime.textContent = new Date().toLocaleTimeString('en-US', { hour12: false });
                 }
-                
-                // Start listeners
+
                 startDashboardListeners();
-                
-                // Register user in system AFTER dashboard is shown
-                setTimeout(() => {
-                    database.ref('/system/currentUser').set({
-                        email: user.email,
-                        uid: user.uid,
-                        loginTime: new Date().toISOString(),
-                        deviceId: currentDeviceId
-                    }).catch(err => {
-                        console.error('Error updating system/currentUser:', err);
-                    });
-                }, 100);
-                
+
+                // Write current user to DB, then release the auth guard
+                database.ref('/system/currentUser').set({
+                    email: user.email,
+                    uid: user.uid,
+                    loginTime: new Date().toISOString(),
+                    deviceId: currentDeviceId
+                }).catch(err => {
+                    console.error('Error updating system/currentUser:', err);
+                }).finally(() => {
+                    isAuthInProgress = false; // safe to let onAuthStateChanged run again
+                });
+
             } catch (error) {
                 console.error('Error showing dashboard:', error);
                 showAuthMessage('Error loading dashboard. Please try again.', 'error');
+                isAuthInProgress = false;
                 auth.signOut();
-                isLoginInProgress = false;
             }
         }
 
@@ -1374,35 +1108,21 @@
             appScreen.classList.remove('active');
             appScreen.style.display = 'none';
             authScreen.style.display = 'block';
-            clearAuthMessage();
         }
 
+        // ─── FIX: onAuthStateChanged now simply checks isAuthInProgress ───
         auth.onAuthStateChanged((user) => {
-            // Skip during login/register to prevent conflicts
-            if (isLoginInProgress) {
-                return;
-            }
-            
-            if (user && !isAuthStateChangeHandled) {
-                // User is logged in - show dashboard only on reload, not during login
-                isAuthStateChangeHandled = true;
-                database.ref('/system/currentUser').once('value', (snapshot) => {
-                    const currentUser = snapshot.val();
-                    if (currentUser && currentUser.uid === user.uid) {
-                        // This user is the current occupant - show dashboard
-                        showDashboard(user);
-                    } else {
-                        // Different user is logged in, or system is vacant - log them out
-                        auth.signOut();
-                        showAuthScreen();
-                    }
-                });
-            } else if (!user) {
+            if (isAuthInProgress) return; // login/register is handling it — stay out
+
+            if (user) {
+                // Page was refreshed while logged in — restore session
+                showDashboard(user);
+            } else {
                 showAuthScreen();
-                isAuthStateChangeHandled = false;
             }
         });
 
+        // ── Rest of app state ──
         let currentMode = 'manual';
         let isUmbrellaOpen = false;
         let isFirebaseConnected = false;
@@ -1419,12 +1139,11 @@
             if (isOnline) {
                 espPill.textContent = '🟢 ESP32 Online';
                 espPill.style.background = 'rgba(76,175,80,0.85)';
-                espPill.style.color = '#fff';
             } else {
                 espPill.textContent = '🔴 ESP32 Offline';
                 espPill.style.background = 'rgba(244,67,54,0.85)';
-                espPill.style.color = '#fff';
             }
+            espPill.style.color = '#fff';
         }
 
         function markEspActive() {
@@ -1462,8 +1181,7 @@
             const humidityText = currentHumidity !== null ? `${currentHumidity.toFixed(2)}%` : '---';
             const lightText = currentLightStatus !== null ? currentLightStatus : '---';
             const rainText = currentRainStatus !== null ? currentRainStatus : '---';
-            const message = `Sensor data: Temp ${tempText}, Humidity ${humidityText}, Light ${lightText}, Rain ${rainText}`;
-            addActivityLogEntry(message);
+            addActivityLogEntry(`Sensor data: Temp ${tempText}, Humidity ${humidityText}, Light ${lightText}, Rain ${rainText}`);
         }
 
         function toggleLed() {
@@ -1483,50 +1201,46 @@
         }
 
         function startDashboardListeners() {
-            if (dashboardListenersInitialized) {
-                return;
-            }
+            if (dashboardListenersInitialized) return;
             dashboardListenersInitialized = true;
-            
+
             try {
-                const db = database;
                 updateFirebaseStatus(true);
                 setEspStatus(false);
-                
-                // Listen to sensor data
-                db.ref('/temperature').on('value', snapshot => {
+
+                database.ref('/temperature').on('value', snapshot => {
                     const value = snapshot.val();
                     if (value !== null) {
                         currentTemp = value;
-                        const tempElem = document.getElementById('tempFinal');
-                        if (tempElem) tempElem.textContent = value.toFixed(2);
+                        const el = document.getElementById('tempFinal');
+                        if (el) el.textContent = value.toFixed(2);
                         updateLastUpdate();
                         markEspActive();
                         refreshActivityLog();
                     }
                 });
 
-                db.ref('/humidity').on('value', snapshot => {
+                database.ref('/humidity').on('value', snapshot => {
                     const value = snapshot.val();
                     if (value !== null) {
                         currentHumidity = value;
-                        const humidityElem = document.getElementById('humidityFinal');
-                        if (humidityElem) humidityElem.textContent = value.toFixed(2);
+                        const el = document.getElementById('humidityFinal');
+                        if (el) el.textContent = value.toFixed(2);
                         updateLastUpdate();
                         markEspActive();
                         refreshActivityLog();
                     }
                 });
 
-                db.ref('/lightStatus').on('value', snapshot => {
+                database.ref('/lightStatus').on('value', snapshot => {
                     const status = snapshot.val();
-                    currentLightStatus = status === 'LIGHT PRESENT' ? 'Yes' : status === 'NO LIGHT PRESENT' || status === 'NO LIGHT' ? 'No' : 'Unknown';
+                    currentLightStatus = status === 'LIGHT PRESENT' ? 'Yes' : (status === 'NO LIGHT PRESENT' || status === 'NO LIGHT') ? 'No' : 'Unknown';
                     updateLightStatus(status);
                     markEspActive();
                     refreshActivityLog();
                 });
 
-                db.ref('/rainStatus').on('value', snapshot => {
+                database.ref('/rainStatus').on('value', snapshot => {
                     const status = snapshot.val();
                     currentRainStatus = status || 'Unknown';
                     updateRainStatus(status);
@@ -1534,7 +1248,7 @@
                     refreshActivityLog();
                 });
 
-                db.ref('/umbrellaState').on('value', snapshot => {
+                database.ref('/umbrellaState').on('value', snapshot => {
                     const value = snapshot.val();
                     if (value !== null) {
                         isUmbrellaOpen = (value === 'OPEN');
@@ -1542,53 +1256,36 @@
                     }
                 });
 
-                db.ref('/mode').on('value', snapshot => {
+                database.ref('/mode').on('value', snapshot => {
                     const value = snapshot.val();
-                    if (value !== null) {
-                        applyModeState(value.toLowerCase());
-                    }
+                    if (value !== null) applyModeState(value.toLowerCase());
                 });
+
             } catch (error) {
                 console.error('Error starting dashboard listeners:', error);
             }
         }
-        
-        
+
         function sendCommand(command) {
-            if (!isFirebaseConnected) {
-                showError('Firebase is not connected');
-                return;
-            }
-            if (currentMode !== 'manual') {
-                showError('Switch to Manual mode before sending commands');
-                return;
-            }
+            if (!isFirebaseConnected) { showError('Firebase is not connected'); return; }
+            if (currentMode !== 'manual') { showError('Switch to Manual mode before sending commands'); return; }
             database.ref('/control').set(command)
                 .then(() => {
-                    const lastCommandElem = document.getElementById('lastCommand');
-                    if (lastCommandElem) {
-                        lastCommandElem.textContent = command;
-                    }
+                    const el = document.getElementById('lastCommand');
+                    if (el) el.textContent = command;
                     showSuccess(`Command sent: ${command}`);
                 })
-                .catch(error => {
-                    showError(error.message || 'Failed to send command');
-                });
+                .catch(error => showError(error.message || 'Failed to send command'));
         }
 
         function setMode(mode) {
-            if (!isFirebaseConnected) {
-                showError('Firebase is not connected');
-                return;
-            }
+            if (!isFirebaseConnected) { showError('Firebase is not connected'); return; }
             database.ref('/mode').set(mode)
                 .then(() => {
                     applyModeState(mode);
                     showSuccess(`Mode set to ${mode.toUpperCase()}`);
                 })
-                .catch(error => {
-                    showError(error.message || 'Failed to change mode');
-                });
+                .catch(error => showError(error.message || 'Failed to change mode'));
         }
 
         function applyModeState(mode) {
@@ -1597,102 +1294,55 @@
             const autoBtn = document.getElementById('autoModeBtn2');
             const modeDesc = document.getElementById('modeDesc');
             if (mode === 'manual') {
-                if (manualBtn) {
-                    manualBtn.style.background = '#00d9d9';
-                    manualBtn.style.color = '#0a0f1a';
-                }
-                if (autoBtn) {
-                    autoBtn.style.background = 'rgba(255,255,255,0.1)';
-                    autoBtn.style.color = '#00d9d9';
-                    autoBtn.style.border = '1px solid rgba(0, 217, 217, 0.3)';
-                }
-                if (modeDesc) {
-                    modeDesc.textContent = 'System is in MANUAL mode. Use control buttons to operate umbrella and LED.';
-                }
+                if (manualBtn) { manualBtn.style.background = '#00d9d9'; manualBtn.style.color = '#0a0f1a'; manualBtn.style.border = 'none'; }
+                if (autoBtn) { autoBtn.style.background = 'rgba(255,255,255,0.1)'; autoBtn.style.color = '#00d9d9'; autoBtn.style.border = '1px solid rgba(0, 217, 217, 0.3)'; }
+                if (modeDesc) modeDesc.textContent = 'System is in MANUAL mode. Use control buttons to operate umbrella and LED.';
             } else {
-                if (autoBtn) {
-                    autoBtn.style.background = '#00d9d9';
-                    autoBtn.style.color = '#0a0f1a';
-                }
-                if (manualBtn) {
-                    manualBtn.style.background = 'rgba(255,255,255,0.1)';
-                    manualBtn.style.color = '#00d9d9';
-                    manualBtn.style.border = '1px solid rgba(0, 217, 217, 0.3)';
-                }
-                if (modeDesc) {
-                    modeDesc.textContent = 'System is in AUTOMATIC mode. Umbrella responds to weather sensors automatically.';
-                }
+                if (autoBtn) { autoBtn.style.background = '#00d9d9'; autoBtn.style.color = '#0a0f1a'; autoBtn.style.border = 'none'; }
+                if (manualBtn) { manualBtn.style.background = 'rgba(255,255,255,0.1)'; manualBtn.style.color = '#00d9d9'; manualBtn.style.border = '1px solid rgba(0, 217, 217, 0.3)'; }
+                if (modeDesc) modeDesc.textContent = 'System is in AUTOMATIC mode. Umbrella responds to weather sensors automatically.';
             }
         }
 
         function updateLightStatus(status) {
             const display = document.getElementById('lightDisplay');
-            if (status === 'LIGHT PRESENT') {
-                display.textContent = 'Yes';
-                display.style.color = '#00d9d9';
-            } else if (status === 'NO LIGHT PRESENT' || status === 'NO LIGHT') {
-                display.textContent = 'No';
-                display.style.color = '#4caf50';
-            } else {
-                display.textContent = 'Unknown';
-                display.style.color = '#ff9800';
-            }
+            if (!display) return;
+            if (status === 'LIGHT PRESENT') { display.textContent = 'Yes'; display.style.color = '#00d9d9'; }
+            else if (status === 'NO LIGHT PRESENT' || status === 'NO LIGHT') { display.textContent = 'No'; display.style.color = '#4caf50'; }
+            else { display.textContent = 'Unknown'; display.style.color = '#ff9800'; }
         }
 
         function updateRainStatus(status) {
             currentRainStatus = status || 'Unknown';
             const display = document.getElementById('rainDisplay');
             const rainIcon = document.getElementById('rainIcon');
+            const conditionText = document.getElementById('rainConditionText');
             if (status === 'RAIN DETECTED') {
-                display.textContent = 'Rain Detected';
-                display.style.color = '#ff6b6b';
+                if (display) { display.textContent = 'Rain Detected'; display.style.color = '#ff6b6b'; }
                 if (rainIcon) rainIcon.style.animation = 'rainDrop 1.5s ease-in-out infinite';
-                const conditionText = document.getElementById('rainConditionText');
-                if (conditionText) {
-                    conditionText.textContent = 'IT IS CURRENTLY RAINING';
-                    conditionText.style.color = '#ffb703';
-                }
+                if (conditionText) { conditionText.textContent = 'IT IS CURRENTLY RAINING'; conditionText.style.color = '#ffb703'; }
             } else if (status === 'NO RAIN DETECTED' || status === 'NO RAIN') {
-                display.textContent = 'No Rain Detected';
-                display.style.color = '#4caf50';
+                if (display) { display.textContent = 'No Rain Detected'; display.style.color = '#4caf50'; }
                 if (rainIcon) rainIcon.style.animation = 'none';
-                const conditionText = document.getElementById('rainConditionText');
-                if (conditionText) {
-                    conditionText.textContent = 'THE SKY IS CLEAR';
-                    conditionText.style.color = 'rgba(255,255,255,0.65)';
-                }
+                if (conditionText) { conditionText.textContent = 'THE SKY IS CLEAR'; conditionText.style.color = 'rgba(255,255,255,0.65)'; }
             } else {
-                display.textContent = 'Unknown';
-                display.style.color = '#ff9800';
+                if (display) { display.textContent = 'Unknown'; display.style.color = '#ff9800'; }
                 if (rainIcon) rainIcon.style.animation = 'none';
-                const conditionText = document.getElementById('rainConditionText');
-                if (conditionText) {
-                    conditionText.textContent = 'STATUS UNKNOWN';
-                    conditionText.style.color = '#ff9800';
-                }
+                if (conditionText) { conditionText.textContent = 'STATUS UNKNOWN'; conditionText.style.color = '#ff9800'; }
             }
         }
 
         function updateUmbrellaDisplay() {
             const text = document.getElementById('umbrellaStatusText');
             if (text) {
-                if (isUmbrellaOpen) {
-                    text.textContent = 'Umbrella OPENED';
-                    text.style.color = '#4ade80';
-                } else {
-                    text.textContent = 'Umbrella CLOSED';
-                    text.style.color = '#f87171';
-                }
+                text.textContent = isUmbrellaOpen ? 'Umbrella OPENED' : 'Umbrella CLOSED';
+                text.style.color = isUmbrellaOpen ? '#4ade80' : '#f87171';
             }
         }
 
         function updateFirebaseStatus(connected) {
             isFirebaseConnected = connected;
-            const statusText = document.getElementById('statusText');
             const fbStatus = document.getElementById('fbStatus');
-            if (statusText) {
-                statusText.textContent = connected ? 'Connected to Firebase' : 'Disconnected from Firebase';
-            }
             if (fbStatus) {
                 fbStatus.textContent = connected ? 'Firebase Connected' : 'Firebase Disconnected';
                 fbStatus.style.background = connected ? 'rgba(76,175,80,0.85)' : 'rgba(244,67,54,0.85)';
@@ -1701,26 +1351,13 @@
         }
 
         function updateLastUpdate() {
-            const lastUpdateElem = document.getElementById('lastUpdate');
-            if (lastUpdateElem) {
-                const now = new Date();
-                lastUpdateElem.textContent = now.toLocaleTimeString('en-US', { hour12: false });
-            }
-        }
-
-        function disableButtons(disabled) {
-            const buttons = [
-                'openBtn', 'closeBtn', 'ledOnBtn', 'ledOffBtn',
-                'manualModeBtn2', 'autoModeBtn2'
-            ];
-            buttons.forEach(id => {
-                const btn = document.getElementById(id);
-                if (btn) btn.disabled = disabled;
-            });
+            const el = document.getElementById('lastUpdate');
+            if (el) el.textContent = new Date().toLocaleTimeString('en-US', { hour12: false });
         }
 
         function showError(message) {
             const errorDiv = document.getElementById('errorMessage');
+            if (!errorDiv) return;
             errorDiv.textContent = '❌ ' + message;
             errorDiv.style.display = 'block';
             setTimeout(() => { errorDiv.style.display = 'none'; }, 4000);
@@ -1728,28 +1365,15 @@
 
         function showSuccess(message) {
             const successDiv = document.getElementById('successMessage');
+            if (!successDiv) return;
             successDiv.textContent = '✅ ' + message;
             successDiv.style.display = 'block';
             setTimeout(() => { successDiv.style.display = 'none'; }, 3000);
         }
 
-        // Scroll Parallax Effect for Dynamic Background
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            
-            // Create subtle parallax shift effect on content
-            const cards = document.querySelectorAll('.card, .overview-card, .auth-card, .app-header');
-            cards.forEach((card, index) => {
-                const speed = 0.5 + (index % 5) * 0.1;
-                const moveY = scrollY * speed;
-                card.style.transform = `translateY(${moveY * 0.01}px)`;
-            });
-        });
-
-        // Mobile viewport height fix for address bar
+        // Mobile viewport height fix
         const setVh = () => {
-            const vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
+            document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
         };
         window.addEventListener('resize', setVh);
         window.addEventListener('orientationchange', setVh);
