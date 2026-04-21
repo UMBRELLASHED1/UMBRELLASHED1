@@ -1,1763 +1,372 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Umbrella Shed - Login & Control</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            width: 100%;
-            overflow-x: hidden;
-            max-width: 100vw;
-            box-sizing: border-box;
-        }
-
-        body {
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: radial-gradient(circle at top, #2a3d66 0%, #08112b 55%);
-            color: #f5f7fa;
-            overflow-x: hidden;
-            position: relative;
-            width: 100%;
-            max-width: 100vw;
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Animated Parallax Background */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(0, 217, 217, 0.08) 0%, transparent 50%);
-            animation: gradientShift 15s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% {
-                opacity: 1;
-                filter: brightness(1);
-            }
-            50% {
-                opacity: 0.8;
-                filter: brightness(1.1);
-            }
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
-            bottom: -50vh;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200vw;
-            height: 150vh;
-            background: 
-                radial-gradient(ellipse at 30% 40%, rgba(102, 126, 234, 0.05) 0%, transparent 40%),
-                radial-gradient(ellipse at 70% 60%, rgba(0, 217, 217, 0.05) 0%, transparent 40%);
-            animation: floatBg 8s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        @keyframes floatBg {
-            0%, 100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            50% {
-                transform: translateX(-50%) translateY(20px);
-            }
-        }
-
-        .page-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: clamp(15px, 5vw, 40px);
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            max-width: 100vw;
-            box-sizing: border-box;
-        }
-
-        .auth-card, .dashboard-container {
-            width: 100%;
-            max-width: clamp(300px, 90vw, 1200px);
-            margin: 0 auto;
-            position: relative;
-            z-index: 10;
-            box-sizing: border-box;
-        }
-
-        .dashboard-inner {
-            max-width: 100%;
-            margin: 0 auto;
-            width: 100%;
-            box-sizing: border-box;
-            overflow-x: hidden;
-        }
-
-        body, .dashboard-inner, #activityLog {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(0, 217, 217, 0.45) rgba(15, 23, 41, 0.85);
-        }
-
-        body::-webkit-scrollbar,
-        .dashboard-inner::-webkit-scrollbar,
-        #activityLog::-webkit-scrollbar {
-            width: 12px;
-            height: 12px;
-        }
-
-        body::-webkit-scrollbar-track,
-        .dashboard-inner::-webkit-scrollbar-track,
-        #activityLog::-webkit-scrollbar-track {
-            background: rgba(15, 23, 41, 0.85);
-            border-radius: 12px;
-        }
-
-        body::-webkit-scrollbar-thumb,
-        .dashboard-inner::-webkit-scrollbar-thumb,
-        #activityLog::-webkit-scrollbar-thumb {
-            background: rgba(0, 217, 217, 0.35);
-            border-radius: 12px;
-            border: 3px solid rgba(15, 23, 41, 0.85);
-        }
-
-        body::-webkit-scrollbar-thumb:hover,
-        .dashboard-inner::-webkit-scrollbar-thumb:hover,
-        #activityLog::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 217, 217, 0.55);
-        }
-
-        .auth-card {
-            background: rgba(10, 24, 58, 0.95);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 24px;
-            box-shadow: 0 25px 80px rgba(0,0,0,0.35);
-            overflow: hidden;
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        .auth-card .left-panel,
-        .auth-card .right-panel {
-            padding: 40px 35px;
-        }
-
-        .left-panel {
-            background: linear-gradient(135deg, rgba(102,126,234,0.15), rgba(118,75,162,0.15));
-        }
-
-        .auth-card h2 {
-            font-size: clamp(1.5rem, 5vw, 2.4rem);
-            margin-bottom: 10px;
-            color: #ffffff;
-        }
-
-        .auth-card p {
-            color: rgba(245,247,250,0.78);
-            font-size: clamp(0.85rem, 2vw, 1rem);
-        }
-
-        .form-group label {
-            color: rgba(245,247,250,0.85);
-            font-weight: 600;
-            font-size: clamp(0.75rem, 1.5vw, 0.95rem);
-        }
-
-        .form-control {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
-            color: #ffffff;
-            border-radius: 12px;
-            padding: clamp(10px, 2vw, 14px) clamp(12px, 3vw, 16px);
-            font-size: clamp(0.85rem, 2vw, 1rem);
-        }
-
-        .form-control::placeholder {
-            color: rgba(255,255,255,0.65);
-        }
-
-        .btn-primary, .btn-secondary {
-            border-radius: 12px;
-            padding: clamp(10px, 2vw, 12px) clamp(18px, 4vw, 24px);
-            font-weight: 700;
-            font-size: clamp(0.85rem, 2vw, 1rem);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .btn-primary:hover, .btn-secondary:hover {
-            transform: translateY(-2px);
-        }
-
-        .auth-toggle {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-
-        .auth-toggle button {
-            flex: 1;
-            border-radius: 999px;
-            border: 1px solid rgba(255,255,255,0.15);
-            background: rgba(255,255,255,0.05);
-            color: #e0e7ff;
-        }
-
-        .auth-toggle button.active {
-            background: #667eea;
-            border-color: #667eea;
-            color: #ffffff;
-        }
-
-        .auth-message {
-            border-radius: 12px;
-            padding: 14px 16px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .auth-error {
-            background: rgba(244,67,54,0.1);
-            color: #ffb3b3;
-            border: 1px solid rgba(244,67,54,0.3);
-        }
-
-        .auth-success {
-            background: rgba(76,175,80,0.12);
-            color: #d4f8da;
-            border: 1px solid rgba(76,175,80,0.3);
-        }
-
-        .section-title {
-            margin-bottom: 18px;
-            font-size: 1rem;
-            color: #98a2b3;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
-        }
-
-        .card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 20px;
-            box-shadow: 0 20px 80px rgba(0,0,0,0.28);
-        }
-
-        .card-header-custom {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            font-weight: bold;
-            border-radius: 20px 20px 0 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-body {
-            padding: 25px;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: clamp(10px, 2vw, 16px);
-            margin-top: clamp(12px, 2vw, 16px);
-            align-items: stretch;
-        }
-
-        .dashboard-grid > div {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: auto;
-            max-height: 260px;
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 16px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 999px;
-            font-weight: 600;
-        }
-
-        .status-badge.connected {
-            background: rgba(76,175,80,0.18);
-        }
-
-        .status-badge.disconnected {
-            background: rgba(244,67,54,0.18);
-        }
-
-        .overview-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 18px;
-            margin-bottom: 18px;
-        }
-
-        .overview-card {
-            padding: clamp(16px, 3vw, 24px) clamp(16px, 3vw, 22px);
-            border-radius: 22px;
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(102, 126, 234, 0.22);
-            min-height: clamp(120px, 20vh, 180px);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .overview-card h3 {
-            margin-bottom: 0;
-            font-size: clamp(0.7rem, 1.2vw, 0.95rem);
-            color: rgba(255,255,255,0.72);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
-        }
-
-        .overview-card p {
-            font-size: clamp(1.8rem, 5vw, 2.4rem);
-            font-weight: 800;
-            color: #eef2ff;
-            margin: 0;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(clamp(250px, 90vw, 350px), 1fr));
-            gap: clamp(16px, 3vw, 24px);
-            margin-top: 30px;
-        }
-
-        .card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 20px;
-            box-shadow: 0 20px 80px rgba(0,0,0,0.28);
-        }
-
-        .card-header-custom {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: clamp(16px, 2vw, 20px);
-            font-weight: bold;
-            font-size: clamp(0.95rem, 2vw, 1.2em);
-            border-radius: 20px 20px 0 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-body {
-            padding: clamp(18px, 3vw, 25px);
-        }
-
-        .status-indicator {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            margin-right: 10px;
-            background: rgba(255,255,255,0.2);
-            transition: background 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .status-indicator.active {
-            background: #34d399;
-            box-shadow: 0 0 12px rgba(52,211,153,0.45);
-        }
-
-        .status-indicator.inactive {
-            background: #f87171;
-            box-shadow: 0 0 12px rgba(248,113,113,0.35);
-        }
-
-        .control-title {
-            margin-bottom: 16px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .sensor-value {
-            font-size: 2.4rem;
-            font-weight: 800;
-            color: #eef2ff;
-            margin-top: 10px;
-        }
-
-        .sensor-unit {
-            font-size: 0.9rem;
-            color: rgba(255,255,255,0.7);
-            margin-left: 6px;
-        }
-
-        .mode-btn {
-            flex: 1;
-            padding: 12px 16px;
-            border: 1px solid rgba(255,255,255,0.15);
-            background: rgba(255,255,255,0.06);
-            color: #ffffff;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .mode-btn.active {
-            background: #667eea;
-            border-color: #667eea;
-        }
-
-        .mode-btn:hover {
-            transform: translateY(-1px);
-        }
-
-        .btn-control {
-            width: 100%;
-            margin-bottom: 12px;
-            border-radius: 14px;
-            padding: 14px 20px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .btn-open { background: linear-gradient(135deg,#38b2ac,#4299e1); color: #fff; }
-        .btn-close { background: linear-gradient(135deg,#ef4444,#f97316); color: #fff; }
-        .btn-led-on { background: linear-gradient(135deg,#fbbf24,#f59e0b); color: #fff; }
-        .btn-led-off { background: linear-gradient(135deg,#6b7280,#374151); color: #fff; }
-
-        .login-topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 22px;
-        }
-
-        .login-topbar span { color: rgba(255,255,255,0.72); }
-
-        .hidden { display: none !important; }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 35px;
-        }
-
-        .login-header h1 {
-            color: #ffffff;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .login-header p {
-            color: rgba(255,255,255,0.68);
-            font-size: 1rem;
-        }
-
-        .small-text {
-            color: rgba(255,255,255,0.68);
-            font-size: 0.9rem;
-        }
-
-        .app-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 28px;
-            flex-wrap: wrap;
-            gap: 18px;
-        }
-
-        .app-header h1 {
-            font-size: 2rem;
-            color: #eef2ff;
-        }
-
-        .user-info {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .user-info button {
-            border-radius: 999px;
-            border: 1px solid rgba(255,255,255,0.14);
-            background: rgba(255,255,255,0.06);
-            color: #ffffff;
-            padding: 10px 18px;
-        }
-
-        @keyframes rainDrop {
-            0%, 100% { transform: translateY(0) scaleY(1); opacity: 1; }
-            50% { transform: translateY(-8px) scaleY(0.95); opacity: 0.8; }
-        }
-
-        .rain-icon {
-            display: inline-block;
-            animation: rainDrop 1.5s ease-in-out infinite;
-        }
-
-        /* Toggle Switch Styles */
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 26px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 217, 217, 0.3);
-            transition: 0.3s;
-            border-radius: 26px;
-            border: 1px solid rgba(0, 217, 217, 0.5);
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 3px;
-            bottom: 2px;
-            background-color: #fff;
-            transition: 0.3s;
-            border-radius: 50%;
-        }
-
-        input:checked + .toggle-slider {
-            background-color: #4caf50;
-            border-color: #4caf50;
-        }
-
-        input:checked + .toggle-slider:before {
-            transform: translateX(24px);
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Mobile Phones (320px - 768px) - AGGRESSIVE MOBILE FIRST */
-        @media (max-width: 768px) {
-            * {
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            html, body {
-                width: 100% !important;
-                overflow-x: hidden !important;
-                max-width: 100% !important;
-            }
-
-            body {
-                padding: 0 !important;
-                font-size: 13px;
-            }
-
-            .page-wrapper {
-                min-height: 100vh;
-                padding: 8px !important;
-                align-items: flex-start;
-                padding-top: 8px !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                box-sizing: border-box !important;
-            }
-
-            .auth-card, .dashboard-container {
-                max-width: 100% !important;
-                width: 100% !important;
-                border-radius: 10px;
-            }
-
-            .auth-card {
-                padding: 0;
-            }
-
-            .auth-card .left-panel,
-            .auth-card .right-panel {
-                padding: 12px 10px !important;
-            }
-
-            .auth-card h2 {
-                font-size: 1.1rem;
-                margin-bottom: 6px;
-            }
-
-            .form-control {
-                font-size: 16px;
-                padding: 10px 10px !important;
-            }
-
-            .btn-primary, .btn-secondary {
-                width: 100%;
-                padding: 10px !important;
-                font-size: 0.9rem;
-            }
-
-            /* DASHBOARD CONTAINER MOBILE FIX */
-            .dashboard-container {
-                width: 100% !important;
-                min-height: 100vh !important;
-                position: relative !important;
-                top: 0 !important;
-                left: 0 !important;
-                overflow: visible !important;
-            }
-
-            .dashboard-inner {
-                padding: 8px !important;
-                gap: 6px !important;
-                width: 100% !important;
-                min-height: 100vh !important;
-                box-sizing: border-box !important;
-                overflow-y: auto !important;
-                overflow-x: hidden !important;
-                max-width: 100% !important;
-            }
-
-            /* Header Stack */
-            [style*="display: flex; justify-content: space-between; align-items: flex-start"] {
-                display: flex !important;
-                flex-direction: column !important;
-                gap: 8px !important;
-                align-items: stretch !important;
-            }
-
-            [style*="display: flex; gap: 12px; align-items: center;"] {
-                display: flex !important;
-                flex-wrap: wrap !important;
-                gap: 6px !important;
-                justify-content: center !important;
-            }
-
-            /* Force single column for all grids */
-            [style*="grid-template-columns: 1fr 1fr 1fr 1fr"],
-            [style*="grid-template-columns: repeat(3, 1fr)"],
-            [style*="grid-template-columns: repeat(auto-fit"],
-            [style*="grid-template-columns: repeat(3"],
-            [style*="grid-template-columns: 1fr 1fr 1fr"],
-            [style*="grid-template-columns: 1fr 1fr"] {
-                grid-template-columns: 1fr !important;
-                gap: 6px !important;
-                width: 100% !important;
-            }
-
-            /* Account info section */
-            [style*="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr"] {
-                display: grid !important;
-                grid-template-columns: 1fr !important;
-                gap: 8px !important;
-                max-width: 100% !important;
-            }
-
-            /* Sensor data section */
-            [style*="display: grid; grid-template-columns: repeat(3"] {
-                display: grid !important;
-                grid-template-columns: 1fr !important;
-                gap: 8px !important;
-            }
-
-            /* Three column layout */
-            [style*="display: grid; grid-template-columns: repeat(3, 1fr); gap"] {
-                display: grid !important;
-                grid-template-columns: 1fr !important;
-                gap: 8px !important;
-            }
-
-            /* Dashboard cards padding - reduce all clamp and fixed padding */
-            [style*="padding: clamp"],
-            [style*="padding: 10px"],
-            [style*="padding: 12px"],
-            [style*="padding: 14px"],
-            [style*="padding: 16px"],
-            [style*="padding: 18px"],
-            [style*="padding: 20px"],
-            [style*="padding: 24px"],
-            [style*="padding: 25px"] {
-                padding: 6px !important;
-            }
-
-            /* Reduce all font sizes */
-            h1, h2, h3, h4, h5, h6 {
-                font-size: 0.9rem !important;
-                margin: 0 !important;
-            }
-
-            /* Reduce all gaps and margins */
-            [style*="gap:"],
-            [style*="gap "],
-            [style*="margin-bottom:"],
-            [style*="margin:"],
-            [style*="margin-bottom"] {
-                gap: 6px !important;
-                margin-bottom: 4px !important;
-                margin: 0 !important;
-            }
-
-            /* Status pills */
-            [style*="background: rgba(76,175,80,0.85); color: #fff; padding: 8px 16px"],
-            [style*="background: rgba(255,67,54,0.85); border: none; color: #fff; padding: 8px 16px"] {
-                padding: 6px 8px !important;
-                font-size: 0.7rem !important;
-                white-space: normal !important;
-            }
-
-            /* User info */
-            [style*="color: rgba(255,255,255,0.85); font-weight: 600"] {
-                font-size: 0.8rem !important;
-            }
-
-            /* Buttons - all types */
-            button[style*="padding:"],
-            button[style*="padding "] {
-                padding: 6px 8px !important;
-                font-size: 0.65rem !important;
-                margin: 2px !important;
-            }
-
-            /* Mode buttons */
-            button[style*="flex: 1"] {
-                padding: 6px 6px !important;
-                font-size: 0.65rem !important;
-            }
-
-            /* Toggle switches - make smaller on mobile */
-            .toggle-switch {
-                width: 36px !important;
-                height: 20px !important;
-            }
-
-            .toggle-slider:before {
-                height: 16px !important;
-                width: 16px !important;
-                left: 2px !important;
-                bottom: 2px !important;
-            }
-
-            input:checked + .toggle-slider:before {
-                transform: translateX(20px) !important;
-            }
-
-            /* Text in cards */
-            [style*="font-size: 0.95rem"],
-            [style*="font-size: 1rem"],
-            [style*="font-size: 1.1rem"],
-            [style*="font-size: 1.2rem"],
-            [style*="font-size: 1.3rem"],
-            [style*="font-size: 1.5rem"] {
-                font-size: 0.75rem !important;
-            }
-
-            [style*="font-size: 1.8rem"],
-            [style*="font-size: 2rem"],
-            [style*="font-size: 2.2rem"] {
-                font-size: 1rem !important;
-            }
-
-            [style*="font-size: 3rem"] {
-                font-size: 1.3rem !important;
-            }
-
-            /* Padding on cards */
-            [style*="padding: 18px"],
-            [style*="padding: 20px"],
-            [style*="padding: 25px"] {
-                padding: 8px !important;
-            }
-
-            /* Gaps */
-            [style*="gap: 16px"],
-            [style*="gap: 18px"],
-            [style*="gap: 32px"],
-            [style*="gap: clamp"] {
-                gap: 6px !important;
-            }
-
-            [style*="gap: 12px"] {
-                gap: 6px !important;
-            }
-
-            /* Activity log */
-            #activityLog {
-                max-height: 80px !important;
-                font-size: 0.7rem !important;
-            }
-
-            /* Margins */
-            [style*="margin-bottom: clamp"],
-            [style*="margin-bottom: 28px"],
-            [style*="margin-bottom: 25px"] {
-                margin-bottom: 8px !important;
-            }
-
-            [style*="margin-bottom: 0"],
-            [style*="margin: 0"] {
-                margin: 0 !important;
-            }
-        }
-
-        /* Tablets (769px - 1024px) */
-        @media (max-width: 1024px) and (min-width: 769px) {
-            .page-wrapper {
-                padding: clamp(12px, 4vw, 20px);
-            }
-
-            .auth-card, .dashboard-container {
-                max-width: 100%;
-            }
-
-            .overview-row {
-                grid-template-columns: 1fr;
-            }
-
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .app-header {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .app-header h1 {
-                width: 100%;
-                font-size: 1.5rem;
-            }
-
-            .user-info {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        /* Large Tablets & Small Desktops (1025px - 1440px) */
-        @media (min-width: 1025px) and (max-width: 1440px) {
-            .page-wrapper {
-                padding: clamp(20px, 5vw, 30px);
-            }
-
-            .dashboard-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        /* Desktop (1441px and above) */
-        @media (min-width: 1441px) {
-            .page-wrapper {
-                padding: clamp(30px, 5vw, 50px);
-            }
-
-            .dashboard-grid {
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            }
-        }
-
-        .login-navigation {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 14px;
-            color: rgba(255,255,255,0.72);
-        }
-
-        .login-navigation button {
-            border: none;
-            background: none;
-            color: #67e8f9;
-            cursor: pointer;
-            font-weight: 700;
-            padding: 0;
-        }
-
-        .dashboard-container {
-            display: none !important;
-            width: 100%;
-            min-height: 100vh;
-            position: relative;
-            top: 0;
-            left: 0;
-            z-index: 100;
-            overflow: visible;
-            box-sizing: border-box;
-            background: linear-gradient(135deg, #0f1729 0%, #1a2749 100%);
-        }
-        
-        .dashboard-container.active {
-            display: flex !important;
-        }
-
-        .dashboard-inner {
-            width: 100%;
-            min-height: 100vh;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: 10px 8px;
-            box-sizing: border-box;
-            background: linear-gradient(135deg, #0f1729 0%, #1a2749 100%);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            -webkit-overflow-scrolling: touch;
-            max-width: 100%;
-        }
-
-        /* Ensure all direct children don't overflow */
-        .dashboard-inner > * {
-            width: 100%;
-            max-width: 100%;
-            box-sizing: border-box;
-            overflow-x: hidden;
-        }
-    </style>
-</head>
-<body>
-    <div class="page-wrapper">
-        <div class="auth-card" id="authScreen">
-            <div style="display: flex; justify-content: center; align-items: center; width: 100%; padding: 20px;">
-                <div style="background: rgba(8, 25, 40, 0.95); border: 2px solid rgba(0, 217, 217, 0.3); border-radius: 24px; padding: 50px 40px; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);">
-                    <div id="loginForm">
-                        <div style="text-align: center; margin-bottom: 40px;">
-                            <div style="font-size: 3rem; margin-bottom: 16px;">🌂</div>
-                            <h2 style="color: #00d9d9; font-size: 1.8rem; margin: 0 0 8px 0; font-weight: 700;">Log In</h2>
-                            <p style="color: rgba(255,255,255,0.65); margin: 0; font-size: 0.95rem;">Umbrella Shed Control</p>
-                        </div>
-
-                        <div style="margin-bottom: 18px;">
-                            <label style="display: block; color: rgba(255,255,255,0.8); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 6px;">EMAIL</label>
-                            <input type="email" id="loginEmail" placeholder="your@email.com" style="width: 100%; padding: 12px 16px; border: 1px solid rgba(0, 217, 217, 0.2); border-radius: 8px; background: rgba(255,255,255,0.95); color: #0a0f1a; font-size: 0.95rem; font-family: inherit;">
-                        </div>
-
-                        <div style="margin-bottom: 28px;">
-                            <label style="display: block; color: rgba(255,255,255,0.8); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 6px;">PASSWORD</label>
-                            <input type="password" id="loginPassword" placeholder="at least 6 characters" style="width: 100%; padding: 12px 16px; border: 1px solid rgba(0, 217, 217, 0.2); border-radius: 8px; background: rgba(255,255,255,0.95); color: #0a0f1a; font-size: 0.95rem; font-family: inherit;">
-                        </div>
-
-                        <button onclick="loginUser()" style="width: 100%; padding: 14px; background: #00d9d9; color: #0a0f1a; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; letter-spacing: 1px; cursor: pointer; text-transform: uppercase; margin-bottom: 20px; transition: all 0.3s ease;">✓ LOG IN</button>
-
-                        <div id="authMessage" class="auth-message" style="margin-bottom: 20px;"></div>
-
-                        <div style="text-align: center;">
-                            <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin: 0;">Don't have an account? <button onclick="switchAuthTab('register')" style="background: none; border: none; color: #00d9d9; cursor: pointer; font-weight: 700; text-decoration: underline; padding: 0; font-size: 0.9rem;">Sign up here</button></p>
-                        </div>
-                    </div>
-
-                    <!-- Signup Form -->
-                    <div id="registerForm" class="hidden">
-                        <div style="text-align: center; margin-bottom: 40px;">
-                            <div style="font-size: 3rem; margin-bottom: 16px;">🌂</div>
-                            <h2 style="color: #00d9d9; font-size: 1.8rem; margin: 0 0 8px 0; font-weight: 700;">Create Account</h2>
-                            <p style="color: rgba(255,255,255,0.65); margin: 0; font-size: 0.95rem;">Umbrella Shed Control</p>
-                        </div>
-
-                        <div style="margin-bottom: 18px;">
-                            <label style="display: block; color: rgba(255,255,255,0.8); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 6px;">EMAIL</label>
-                            <input type="email" id="registerEmail" placeholder="your@email.com" style="width: 100%; padding: 12px 16px; border: 1px solid rgba(0, 217, 217, 0.2); border-radius: 8px; background: rgba(255,255,255,0.95); color: #0a0f1a; font-size: 0.95rem; font-family: inherit;">
-                        </div>
-
-                        <div style="margin-bottom: 18px;">
-                            <label style="display: block; color: rgba(255,255,255,0.8); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 6px;">USERNAME</label>
-                            <input type="text" id="registerUsername" placeholder="username" style="width: 100%; padding: 12px 16px; border: 1px solid rgba(0, 217, 217, 0.2); border-radius: 8px; background: rgba(255,255,255,0.95); color: #0a0f1a; font-size: 0.95rem; font-family: inherit;">
-                        </div>
-
-                        <div style="margin-bottom: 18px;">
-                            <label style="display: block; color: rgba(255,255,255,0.8); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 6px;">PASSWORD</label>
-                            <input type="password" id="registerPassword" placeholder="at least 6 characters" style="width: 100%; padding: 12px 16px; border: 1px solid rgba(0, 217, 217, 0.2); border-radius: 8px; background: rgba(255,255,255,0.95); color: #0a0f1a; font-size: 0.95rem; font-family: inherit;">
-                        </div>
-
-                        <div style="margin-bottom: 28px;">
-                            <label style="display: block; color: rgba(255,255,255,0.8); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 6px;">CONFIRM PASSWORD</label>
-                            <input type="password" id="registerConfirmPassword" placeholder="confirm password" style="width: 100%; padding: 12px 16px; border: 1px solid rgba(0, 217, 217, 0.2); border-radius: 8px; background: rgba(255,255,255,0.95); color: #0a0f1a; font-size: 0.95rem; font-family: inherit;">
-                        </div>
-
-                        <button onclick="registerUser()" style="width: 100%; padding: 14px; background: #00d9d9; color: #0a0f1a; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; letter-spacing: 1px; cursor: pointer; text-transform: uppercase; margin-bottom: 20px; transition: all 0.3s ease;">✓ SIGN UP</button>
-
-                        <div id="authMessage" class="auth-message" style="margin-bottom: 20px;"></div>
-
-                        <div style="text-align: center;">
-                            <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin: 0;">Already have an account? <button onclick="switchAuthTab('login')" style="background: none; border: none; color: #00d9d9; cursor: pointer; font-weight: 700; text-decoration: underline; padding: 0; font-size: 0.9rem;">Log in here</button></p>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="dashboard-container" id="appScreen">
-        <div class="dashboard-inner">
-            <!-- Header -->
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
-                <div>
-                    <h1 style="font-size: clamp(1.3rem, 4vw, 2.2rem); color: #00d9d9; margin: 0; font-weight: 700;">🌂 Control Dashboard</h1>
-                </div>
-                <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-                    <button style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #00d9d9; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.9rem;"><i class="fas fa-moon"></i></button>
-                    <span style="color: rgba(255,255,255,0.85); font-weight: 600;" id="signedInUser">User</span>
-                    <button style="background: rgba(255,67,54,0.85); border: none; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 700;" onclick="logoutUser()">🔴 Logout</button>
-                    <span id="espStatusPill" style="background: rgba(76,175,80,0.85); color: #fff; padding: 8px 16px; border-radius: 6px; font-weight: 700; font-size: 0.9rem;">🟢 ESP32 Online</span>
-                    <span id="fbStatus" style="background: rgba(76,175,80,0.85); color: #fff; padding: 8px 16px; border-radius: 6px; font-weight: 700; font-size: 0.9rem;">Firebase Connected</span>
-                </div>
-            </div>
-
-            <!-- Account Information -->
-            <div style="background: rgba(8, 25, 40, 0.9); border: 1px solid rgba(0, 217, 217, 0.25); border-radius: 12px; padding: 10px; margin-bottom: 0;">
-                <h3 style="color: #00d9d9; margin: 0 0 8px 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;"><i class="fas fa-user"></i> ACCOUNT INFORMATION</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px;">
-                    <div>
-                        <p style="color: rgba(255,255,255,0.6); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px 0;">USERNAME</p>
-                        <p style="color: #fff; font-size: 1rem; font-weight: 600; margin: 0;" id="accountUsername">User</p>
-                    </div>
-                    <div>
-                        <p style="color: rgba(255,255,255,0.6); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px 0;">EMAIL</p>
-                        <p style="color: #fff; font-size: 1rem; font-weight: 600; margin: 0;" id="accountEmail">user@email.com</p>
-                    </div>
-                    <div>
-                        <p style="color: rgba(255,255,255,0.6); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px 0;">ACCOUNT CREATED</p>
-                        <p style="color: #fff; font-size: 1rem; font-weight: 600; margin: 0;" id="accountCreated">---</p>
-                    </div>
-                    <div>
-                        <p style="color: rgba(255,255,255,0.6); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px 0;">STATUS</p>
-                        <p style="color: #4caf50; font-size: 1rem; font-weight: 700; margin: 0;">active</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Live Sensor Data -->
-            <div style="background: rgba(8, 25, 40, 0.9); border: 1px solid rgba(0, 217, 217, 0.25); border-radius: 12px; padding: 10px; margin-bottom: 0;">
-                <h3 style="color: #00d9d9; margin: 0 0 8px 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;"><i class="fas fa-satellite"></i> LIVE SENSOR DATA</h3>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
-                    <div style="text-align: center; padding: 10px; background: rgba(0, 217, 217, 0.08); border-radius: 8px; border: 1px solid rgba(0, 217, 217, 0.15);">
-                        <p style="color: rgba(255,255,255,0.7); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px 0;">TEMPERATURE</p>
-                        <p style="color: #00d9d9; font-size: 1.3rem; font-weight: 800; margin: 0;"><span id="tempFinal">16.5</span>°C</p>
-                    </div>
-                    <div style="text-align: center; padding: 10px; background: rgba(0, 217, 217, 0.08); border-radius: 8px; border: 1px solid rgba(0, 217, 217, 0.15);">
-                        <p style="color: rgba(255,255,255,0.7); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px 0;">HUMIDITY</p>
-                        <p style="color: #00d9d9; font-size: 1.3rem; font-weight: 800; margin: 0;"><span id="humidityFinal">36</span>%</p>
-                    </div>
-                    <div style="text-align: center; padding: 10px; background: rgba(0, 217, 217, 0.08); border-radius: 8px; border: 1px solid rgba(0, 217, 217, 0.15);">
-                        <p style="color: rgba(255,255,255,0.7); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px 0;">LIGHT DETECTED</p>
-                        <p style="color: #00d9d9; font-size: 1.3rem; font-weight: 800; margin: 0;" id="lightDisplay">No</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Three Column Layout -->
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 0;">
-                <!-- Rain Status -->
-                <div style="background: rgba(8, 25, 40, 0.9); border: 1px solid rgba(0, 217, 217, 0.25); border-radius: 12px; padding: 10px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
-                    <h3 style="color: #00d9d9; margin: 0 0 6px 0; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;"><i class="fas fa-droplet"></i> RAIN</h3>
-                    <p style="font-size: 2rem; margin: 6px 0;" class="rain-icon" id="rainIcon">💧</p>
-                    <p style="color: #4caf50; font-size: 1rem; font-weight: 700; margin: 4px 0;" id="rainDisplay">No Rain</p>
-                    <p id="rainConditionText" style="color: rgba(255,255,255,0.65); font-size: 0.7rem; margin: 2px 0 0 0;">CLEAR</p>
-                </div>
-
-                <!-- Control Mode -->
-                <div style="background: rgba(8, 25, 40, 0.9); border: 1px solid rgba(0, 217, 217, 0.25); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
-                    <h3 style="color: #00d9d9; margin: 0 0 6px 0; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;"><i class="fas fa-sliders-h"></i> MODE</h3>
-                    <div style="display: flex; gap: 6px; margin-bottom: 6px;">
-                        <button class="mode-btn active" id="autoModeBtn2" onclick="setMode('auto')" style="flex: 1; padding: 8px; background: #00d9d9; color: #0a0f1a; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.7rem;">AUTO</button>
-                        <button class="mode-btn" id="manualModeBtn2" onclick="setMode('manual')" style="flex: 1; padding: 8px; background: rgba(255,255,255,0.1); color: #00d9d9; border: 1px solid rgba(0, 217, 217, 0.3); border-radius: 6px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.7rem;">MANUAL</button>
-                    </div>
-                    <p style="color: rgba(255,255,255,0.75); font-size: 0.7rem; margin: 0; text-align: center;" id="modeDesc">Sensors Active</p>
-                </div>
-
-                <!-- Actuator Controls -->
-                <div style="background: rgba(8, 25, 40, 0.9); border: 1px solid rgba(0, 217, 217, 0.25); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;">
-                    <h3 style="color: #00d9d9; margin: 0 0 6px 0; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;"><i class="fas fa-microchip"></i> CONTROL</h3>
-                    <div style="display: flex; gap: 6px; margin-bottom: 6px;">
-                        <button style="flex: 1; padding: 8px; background: #4caf50; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.7rem;" onclick="sendCommand('OPEN')">DEPLOY</button>
-                        <button style="flex: 1; padding: 8px; background: #ff6b6b; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.7rem;" onclick="sendCommand('CLOSE')">RETRACT</button>
-                    </div>
-                    <div style="margin-top: 4px; display: grid; gap: 6px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px; background: rgba(0, 217, 217, 0.08); border-radius: 6px;">
-                            <span style="color: #fff; font-weight: 600; font-size: 0.7rem;">LED</span>
-                            <label class="toggle-switch" style="margin: 0;">
-                                <input type="checkbox" id="ledToggle" onchange="toggleLed()">
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px; background: rgba(0, 217, 217, 0.08); border-radius: 6px;">
-                            <span style="color: #fff; font-weight: 600; font-size: 0.7rem;">Motor</span>
-                            <label class="toggle-switch" style="margin: 0;">
-                                <input type="checkbox" id="umbrellaToggle" onchange="toggleUmbrella()">
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div style="margin-top: 2px; padding: 6px; background: rgba(255,255,255,0.05); border-radius: 6px; border: 1px solid rgba(0, 217, 217, 0.12); color: rgba(255,255,255,0.8); font-size: 0.7rem;">
-                            Last: <span id="lastCommand" style="color: #00d9d9; font-weight: 600;">None</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Activity Log -->
-            <div style="background: rgba(8, 25, 40, 0.9); border: 1px solid rgba(0, 217, 217, 0.25); border-radius: 8px; padding: 6px; flex-shrink: 0;">
-                <h3 style="color: #00d9d9; margin: 0 0 4px 0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;"><i class="fas fa-history"></i> LOG</h3>
-                <div id="activityLog" style="max-height: 80px; overflow-y: auto; font-size: 0.7rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 3px 0; border-bottom: 1px solid rgba(0, 217, 217, 0.15); color: rgba(255,255,255,0.8);">
-                        <span><i class="fas fa-circle" style="color: #4caf50; font-size: 0.4rem; margin-right: 4px;"></i>Initialized</span>
-                        <span style="color: rgba(255,255,255,0.5); font-size: 0.65rem;" id="initTime">00:00:00</span>
-                    </div>
-                </div>
-            </div>
-
-            <div id="errorMessage" class="auth-message auth-error" style="position: fixed; bottom: 30px; right: 30px; max-width: 300px; z-index: 999;"></div>
-            <div id="successMessage" class="auth-message auth-success" style="position: fixed; bottom: 30px; right: 30px; max-width: 300px; z-index: 999;"></div>
-        </div>
-    </div>
-
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyA9KGSzIxg05Esja156k8pLwnJlLysYHRI",
-            authDomain: "umbrellashednew.firebaseapp.com",
-            databaseURL: "https://umbrellashednew-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "umbrellashednew",
-            storageBucket: "umbrellashednew.firebasestorage.app",
-            messagingSenderId: "650966363813",
-            appId: "1:650966363813:web:80c6fc450ae9245352a74c"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const database = firebase.database();
-
-        const authScreen = document.getElementById('authScreen');
-        const appScreen = document.getElementById('appScreen');
-        const signedInUser = document.getElementById('signedInUser');
-        const authMessage = document.getElementById('authMessage');
-        let dashboardListenersInitialized = false;
-        
-        // Device session management
-        let currentDeviceId = null;
-        let pendingLoginUser = null;
-        const MAX_CONCURRENT_USERS = 1;
-        
-        function generateDeviceId() {
-            let deviceId = localStorage.getItem('deviceId');
-            if (!deviceId) {
-                deviceId = 'device_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
-                localStorage.setItem('deviceId', deviceId);
-            }
-            return deviceId;
-        }
-        
-        currentDeviceId = generateDeviceId();
-        
-        let isAuthStateChangeHandled = false;
-        let isLoginInProgress = false;
-        
-        function switchAuthTab(tab) {
-            document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
-            document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
-            clearAuthMessage(); 
-        }
-
-        function showAuthMessage(message, type = 'error') {
-            const authMessages = document.querySelectorAll('#authMessage');
-            authMessages.forEach(authMessage => {
-                authMessage.textContent = message;
-                authMessage.className = 'auth-message ' + (type === 'success' ? 'auth-success' : 'auth-error');
-                authMessage.style.display = 'block';
-            });
-        }
-
-        function clearAuthMessage() {
-            authMessage.style.display = 'none';
-            authMessage.textContent = '';
-        }
-
-        function loginUser() {
-            clearAuthMessage();
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            if (!email || !password) {
-                showAuthMessage('Please enter both email and password.');
-                return;
-            }
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    showDashboard(user);
-                })
-                .catch((error) => {
-                    showAuthMessage(`${error.code}: ${error.message}` || 'Login failed.');
-                });
-        }
-
-        function registerUser() {
-            clearAuthMessage();
-            const email = document.getElementById('registerEmail').value.trim();
-            const username = document.getElementById('registerUsername').value.trim();
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirmPassword').value;
-            
-            if (!email || !username || !password || !confirmPassword) {
-                showAuthMessage('Please fill in all registration fields.');
-                return;
-            }
-            if (password !== confirmPassword) {
-                showAuthMessage('Passwords do not match.');
-                return;
-            }
-            
-            auth.createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    return database.ref('/users/' + user.uid).set({
-                        username: username,
-                        email: user.email,
-                        createdAt: new Date().toISOString()
-                    }).then(() => user);
-                })
-                .then((user) => {
-                    showDashboard(user);
-                })
-                .catch((error) => {
-                    showAuthMessage(`${error.code}: ${error.message}` || 'Registration failed.');
-                });
-        }
-
-        function logoutUser() {
-            const user = auth.currentUser;
-            
-            // Remove user from database
-            if (user) {
-                database.ref('/system/currentUser').remove();
-            }
-            
-            // Stop all sensor listeners
-            database.ref('/temperature').off();
-            database.ref('/humidity').off();
-            database.ref('/lightStatus').off();
-            database.ref('/rainStatus').off();
-            database.ref('/umbrellaState').off();
-            database.ref('/mode').off();
-            
-            // Reset state
-            dashboardListenersInitialized = false;
-            
-            // Sign out from Firebase
-            auth.signOut().then(() => {
-                showAuthScreen();
-                showAuthMessage('Logged out successfully.', 'success');
-                switchAuthTab('login');
-                
-                // Clear all input fields
-                document.getElementById('loginEmail').value = '';
-                document.getElementById('loginPassword').value = '';
-                document.getElementById('registerEmail').value = '';
-                document.getElementById('registerUsername').value = '';
-                document.getElementById('registerPassword').value = '';
-                document.getElementById('registerConfirmPassword').value = '';
-            }).catch((error) => {
-                showAuthScreen();
-                showAuthMessage(error.message || 'Logout failed.');
-            });
-        }
-        
-        function forceSignOutOtherUsers() {
-            // Removed - no longer needed
-            return;
-        }
-
-        function showDashboard(user) {
-            try {
-                // Hide auth screens
-                const pageWrapper = document.querySelector('.page-wrapper');
-                if (pageWrapper) pageWrapper.style.display = 'none';
-                authScreen.style.display = 'none';
-                
-                // Show dashboard using class
-                appScreen.classList.add('active');
-                appScreen.style.display = 'flex';
-                
-                const email = user.email || 'User';
-                const username = email.split('@')[0] || 'User';
-                
-                // Update user info
-                const signedInUserElem = document.getElementById('signedInUser');
-                if (signedInUserElem) signedInUserElem.textContent = username;
-                
-                const accountUsernameElem = document.getElementById('accountUsername');
-                if (accountUsernameElem) accountUsernameElem.textContent = username;
-                
-                const accountEmailElem = document.getElementById('accountEmail');
-                if (accountEmailElem) accountEmailElem.textContent = email;
-                
-                const createdDate = new Date(user.metadata.creationTime).toLocaleString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric'
-                });
-                const accountCreatedElem = document.getElementById('accountCreated');
-                if (accountCreatedElem) accountCreatedElem.textContent = createdDate;
-                
-                const initTime = document.getElementById('initTime');
-                if (initTime) {
-                    initTime.textContent = new Date().toLocaleTimeString('en-US', { hour12: false });
-                }
-                
-                // Start listeners
-                startDashboardListeners();
-                
-                // Register user in system AFTER dashboard is shown
-                setTimeout(() => {
-                    database.ref('/system/currentUser').set({
-                        email: user.email,
-                        uid: user.uid,
-                        loginTime: new Date().toISOString(),
-                        deviceId: currentDeviceId
-                    }).catch(err => {
-                        console.error('Error updating system/currentUser:', err);
-                    });
-                }, 100);
-                
-            } catch (error) {
-                console.error('Error showing dashboard:', error);
-                showAuthMessage('Error loading dashboard. Please try again.', 'error');
-                auth.signOut();
-                isLoginInProgress = false;
-            }
-        }
-
-        function showAuthScreen() {
-            const pageWrapper = document.querySelector('.page-wrapper');
-            if (pageWrapper) pageWrapper.style.display = 'flex';
-            appScreen.classList.remove('active');
-            appScreen.style.display = 'none';
-            authScreen.style.display = 'block';
-            clearAuthMessage();
-        }
-
-        auth.onAuthStateChanged((user) => {
-            // Skip during login/register to prevent conflicts
-            if (isLoginInProgress) {
-                return;
-            }
-            
-            if (user && !isAuthStateChangeHandled) {
-                // User is logged in - show dashboard only on reload, not during login
-                isAuthStateChangeHandled = true;
-                database.ref('/system/currentUser').once('value', (snapshot) => {
-                    const currentUser = snapshot.val();
-                    if (currentUser && currentUser.uid === user.uid) {
-                        // This user is the current occupant - show dashboard
-                        showDashboard(user);
-                    } else {
-                        // Different user is logged in, or system is vacant - log them out
-                        auth.signOut();
-                        showAuthScreen();
-                    }
-                });
-            } else if (!user) {
-                showAuthScreen();
-                isAuthStateChangeHandled = false;
-            }
-        });
-
-        let currentMode = 'manual';
-        let isUmbrellaOpen = false;
-        let isFirebaseConnected = false;
-        let currentTemp = null;
-        let currentHumidity = null;
-        let currentLightStatus = null;
-        let currentRainStatus = null;
-        let espLastSeen = null;
-        const ESP_OFFLINE_TIMEOUT_MS = 10000;
-
-        function setEspStatus(isOnline) {
-            const espPill = document.getElementById('espStatusPill');
-            if (!espPill) return;
-            if (isOnline) {
-                espPill.textContent = '🟢 ESP32 Online';
-                espPill.style.background = 'rgba(76,175,80,0.85)';
-                espPill.style.color = '#fff';
-            } else {
-                espPill.textContent = '🔴 ESP32 Offline';
-                espPill.style.background = 'rgba(244,67,54,0.85)';
-                espPill.style.color = '#fff';
-            }
-        }
-
-        function markEspActive() {
-            espLastSeen = Date.now();
-            setEspStatus(true);
-        }
-
-        function checkEspStatus() {
-            if (!espLastSeen || Date.now() - espLastSeen > ESP_OFFLINE_TIMEOUT_MS) {
-                setEspStatus(false);
-            }
-        }
-
-        setInterval(checkEspStatus, 3000);
-
-        function addActivityLogEntry(message) {
-            const log = document.getElementById('activityLog');
-            if (!log) return;
-            const now = new Date().toLocaleTimeString('en-US', { hour12: false });
-            const entry = document.createElement('div');
-            entry.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(0, 217, 217, 0.15); color: rgba(255,255,255,0.8);';
-            entry.innerHTML = `
-                <span style="display: inline-flex; align-items: center; gap: 6px; flex: 1;">
-                    <i class="fas fa-circle" style="color: #4caf50; font-size: 0.5rem; flex-shrink: 0;"></i>
-                    <span>${message}</span>
-                </span>
-                <span style="color: rgba(255,255,255,0.5); font-size: 0.75rem; flex-shrink: 0; margin-left: 8px;">${now}</span>
-            `;
-            log.appendChild(entry);
-            log.scrollTop = log.scrollHeight;
-        }
-
-        function refreshActivityLog() {
-            const tempText = currentTemp !== null ? `${currentTemp.toFixed(2)}°C` : '---';
-            const humidityText = currentHumidity !== null ? `${currentHumidity.toFixed(2)}%` : '---';
-            const lightText = currentLightStatus !== null ? currentLightStatus : '---';
-            const rainText = currentRainStatus !== null ? currentRainStatus : '---';
-            const message = `Sensor data: Temp ${tempText}, Humidity ${humidityText}, Light ${lightText}, Rain ${rainText}`;
-            addActivityLogEntry(message);
-        }
-
-        function toggleLed() {
-            const toggle = document.getElementById('ledToggle');
-            if (!toggle) return;
-            const command = toggle.checked ? 'LED_ON' : 'LED_OFF';
-            sendCommand(command);
-            addActivityLogEntry(`LED switched ${toggle.checked ? 'ON' : 'OFF'}`);
-        }
-
-        function toggleUmbrella() {
-            const toggle = document.getElementById('umbrellaToggle');
-            if (!toggle) return;
-            const command = toggle.checked ? 'OPEN' : 'CLOSE';
-            sendCommand(command);
-            addActivityLogEntry(`Umbrella ${toggle.checked ? 'OPEN' : 'CLOSE'}`);
-        }
-
-        function startDashboardListeners() {
-            if (dashboardListenersInitialized) {
-                return;
-            }
-            dashboardListenersInitialized = true;
-            
-            try {
-                const db = database;
-                updateFirebaseStatus(true);
-                setEspStatus(false);
-                
-                // Listen to sensor data
-                db.ref('/temperature').on('value', snapshot => {
-                    const value = snapshot.val();
-                    if (value !== null) {
-                        currentTemp = value;
-                        const tempElem = document.getElementById('tempFinal');
-                        if (tempElem) tempElem.textContent = value.toFixed(2);
-                        updateLastUpdate();
-                        markEspActive();
-                        refreshActivityLog();
-                    }
-                });
-
-                db.ref('/humidity').on('value', snapshot => {
-                    const value = snapshot.val();
-                    if (value !== null) {
-                        currentHumidity = value;
-                        const humidityElem = document.getElementById('humidityFinal');
-                        if (humidityElem) humidityElem.textContent = value.toFixed(2);
-                        updateLastUpdate();
-                        markEspActive();
-                        refreshActivityLog();
-                    }
-                });
-
-                db.ref('/lightStatus').on('value', snapshot => {
-                    const status = snapshot.val();
-                    currentLightStatus = status === 'LIGHT PRESENT' ? 'Yes' : status === 'NO LIGHT PRESENT' || status === 'NO LIGHT' ? 'No' : 'Unknown';
-                    updateLightStatus(status);
-                    markEspActive();
-                    refreshActivityLog();
-                });
-
-                db.ref('/rainStatus').on('value', snapshot => {
-                    const status = snapshot.val();
-                    currentRainStatus = status || 'Unknown';
-                    updateRainStatus(status);
-                    markEspActive();
-                    refreshActivityLog();
-                });
-
-                db.ref('/umbrellaState').on('value', snapshot => {
-                    const value = snapshot.val();
-                    if (value !== null) {
-                        isUmbrellaOpen = (value === 'OPEN');
-                        updateUmbrellaDisplay();
-                    }
-                });
-
-                db.ref('/mode').on('value', snapshot => {
-                    const value = snapshot.val();
-                    if (value !== null) {
-                        applyModeState(value.toLowerCase());
-                    }
-                });
-            } catch (error) {
-                console.error('Error starting dashboard listeners:', error);
-            }
-        }
-        
-        
-        function sendCommand(command) {
-            if (!isFirebaseConnected) {
-                showError('Firebase is not connected');
-                return;
-            }
-            if (currentMode !== 'manual') {
-                showError('Switch to Manual mode before sending commands');
-                return;
-            }
-            database.ref('/control').set(command)
-                .then(() => {
-                    const lastCommandElem = document.getElementById('lastCommand');
-                    if (lastCommandElem) {
-                        lastCommandElem.textContent = command;
-                    }
-                    showSuccess(`Command sent: ${command}`);
-                })
-                .catch(error => {
-                    showError(error.message || 'Failed to send command');
-                });
-        }
-
-        function setMode(mode) {
-            if (!isFirebaseConnected) {
-                showError('Firebase is not connected');
-                return;
-            }
-            database.ref('/mode').set(mode)
-                .then(() => {
-                    applyModeState(mode);
-                    showSuccess(`Mode set to ${mode.toUpperCase()}`);
-                })
-                .catch(error => {
-                    showError(error.message || 'Failed to change mode');
-                });
-        }
-
-        function applyModeState(mode) {
-            currentMode = mode;
-            const manualBtn = document.getElementById('manualModeBtn2');
-            const autoBtn = document.getElementById('autoModeBtn2');
-            const modeDesc = document.getElementById('modeDesc');
-            if (mode === 'manual') {
-                if (manualBtn) {
-                    manualBtn.style.background = '#00d9d9';
-                    manualBtn.style.color = '#0a0f1a';
-                }
-                if (autoBtn) {
-                    autoBtn.style.background = 'rgba(255,255,255,0.1)';
-                    autoBtn.style.color = '#00d9d9';
-                    autoBtn.style.border = '1px solid rgba(0, 217, 217, 0.3)';
-                }
-                if (modeDesc) {
-                    modeDesc.textContent = 'System is in MANUAL mode. Use control buttons to operate umbrella and LED.';
-                }
-            } else {
-                if (autoBtn) {
-                    autoBtn.style.background = '#00d9d9';
-                    autoBtn.style.color = '#0a0f1a';
-                }
-                if (manualBtn) {
-                    manualBtn.style.background = 'rgba(255,255,255,0.1)';
-                    manualBtn.style.color = '#00d9d9';
-                    manualBtn.style.border = '1px solid rgba(0, 217, 217, 0.3)';
-                }
-                if (modeDesc) {
-                    modeDesc.textContent = 'System is in AUTOMATIC mode. Umbrella responds to weather sensors automatically.';
-                }
-            }
-        }
-
-        function updateLightStatus(status) {
-            const display = document.getElementById('lightDisplay');
-            if (status === 'LIGHT PRESENT') {
-                display.textContent = 'Yes';
-                display.style.color = '#00d9d9';
-            } else if (status === 'NO LIGHT PRESENT' || status === 'NO LIGHT') {
-                display.textContent = 'No';
-                display.style.color = '#4caf50';
-            } else {
-                display.textContent = 'Unknown';
-                display.style.color = '#ff9800';
-            }
-        }
-
-        function updateRainStatus(status) {
-            currentRainStatus = status || 'Unknown';
-            const display = document.getElementById('rainDisplay');
-            const rainIcon = document.getElementById('rainIcon');
-            if (status === 'RAIN DETECTED') {
-                display.textContent = 'Rain Detected';
-                display.style.color = '#ff6b6b';
-                if (rainIcon) rainIcon.style.animation = 'rainDrop 1.5s ease-in-out infinite';
-                const conditionText = document.getElementById('rainConditionText');
-                if (conditionText) {
-                    conditionText.textContent = 'IT IS CURRENTLY RAINING';
-                    conditionText.style.color = '#ffb703';
-                }
-            } else if (status === 'NO RAIN DETECTED' || status === 'NO RAIN') {
-                display.textContent = 'No Rain Detected';
-                display.style.color = '#4caf50';
-                if (rainIcon) rainIcon.style.animation = 'none';
-                const conditionText = document.getElementById('rainConditionText');
-                if (conditionText) {
-                    conditionText.textContent = 'THE SKY IS CLEAR';
-                    conditionText.style.color = 'rgba(255,255,255,0.65)';
-                }
-            } else {
-                display.textContent = 'Unknown';
-                display.style.color = '#ff9800';
-                if (rainIcon) rainIcon.style.animation = 'none';
-                const conditionText = document.getElementById('rainConditionText');
-                if (conditionText) {
-                    conditionText.textContent = 'STATUS UNKNOWN';
-                    conditionText.style.color = '#ff9800';
-                }
-            }
-        }
-
-        function updateUmbrellaDisplay() {
-            const text = document.getElementById('umbrellaStatusText');
-            if (text) {
-                if (isUmbrellaOpen) {
-                    text.textContent = 'Umbrella OPENED';
-                    text.style.color = '#4ade80';
-                } else {
-                    text.textContent = 'Umbrella CLOSED';
-                    text.style.color = '#f87171';
-                }
-            }
-        }
-
-        function updateFirebaseStatus(connected) {
-            isFirebaseConnected = connected;
-            const statusText = document.getElementById('statusText');
-            const fbStatus = document.getElementById('fbStatus');
-            if (statusText) {
-                statusText.textContent = connected ? 'Connected to Firebase' : 'Disconnected from Firebase';
-            }
-            if (fbStatus) {
-                fbStatus.textContent = connected ? 'Firebase Connected' : 'Firebase Disconnected';
-                fbStatus.style.background = connected ? 'rgba(76,175,80,0.85)' : 'rgba(244,67,54,0.85)';
-                fbStatus.style.color = '#fff';
-            }
-        }
-
-        function updateLastUpdate() {
-            const lastUpdateElem = document.getElementById('lastUpdate');
-            if (lastUpdateElem) {
-                const now = new Date();
-                lastUpdateElem.textContent = now.toLocaleTimeString('en-US', { hour12: false });
-            }
-        }
-
-        function disableButtons(disabled) {
-            const buttons = [
-                'openBtn', 'closeBtn', 'ledOnBtn', 'ledOffBtn',
-                'manualModeBtn2', 'autoModeBtn2'
-            ];
-            buttons.forEach(id => {
-                const btn = document.getElementById(id);
-                if (btn) btn.disabled = disabled;
-            });
-        }
-
-        function showError(message) {
-            const errorDiv = document.getElementById('errorMessage');
-            errorDiv.textContent = '❌ ' + message;
-            errorDiv.style.display = 'block';
-            setTimeout(() => { errorDiv.style.display = 'none'; }, 4000);
-        }
-
-        function showSuccess(message) {
-            const successDiv = document.getElementById('successMessage');
-            successDiv.textContent = '✅ ' + message;
-            successDiv.style.display = 'block';
-            setTimeout(() => { successDiv.style.display = 'none'; }, 3000);
-        }
-
-        // Scroll Parallax Effect for Dynamic Background
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            
-            // Create subtle parallax shift effect on content
-            const cards = document.querySelectorAll('.card, .overview-card, .auth-card, .app-header');
-            cards.forEach((card, index) => {
-                const speed = 0.5 + (index % 5) * 0.1;
-                const moveY = scrollY * speed;
-                card.style.transform = `translateY(${moveY * 0.01}px)`;
-            });
-        });
-
-        // Mobile viewport height fix for address bar
-        const setVh = () => {
-            const vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-        };
-        window.addEventListener('resize', setVh);
-        window.addEventListener('orientationchange', setVh);
-        setVh();
-
-        window.onload = function() {
-            switchAuthTab('login');
-        };
-    </script>
-</body>
-</html>
+  // ============================================================
+  // SMART UMBRELLA SYSTEM - ESP32 Code (UPDATED)
+  // with Firebase Real-time Database Integration
+  // ============================================================
+
+  #include <WiFi.h>
+  #include <Firebase_ESP_Client.h>
+  #include <DHT.h>
+  #include "addons/TokenHelper.h"
+  #include "addons/RTDBHelper.h"
+
+  // ================= DHT =================
+  #define DHT_PIN 4
+  #define DHTTYPE DHT22
+  DHT dht(DHT_PIN, DHTTYPE);
+
+  // ================= WIFI ================= 
+  const char* ssid = "fh_b4a558";
+  const char* password = "wlan4b5aa7";
+
+  // ================= FIREBASE =================
+  #define API_KEY "AIzaSyA9KGSzIxg05Esja156k8pLwnJlLysYHRI"
+  #define DATABASE_URL "umbrellashednew-default-rtdb.asia-southeast1.firebasedatabase.app"
+
+  // ================= MOTORS =================
+  #define STEP_PIN 25
+  #define DIR_PIN 26
+  #define ENA_PIN 27
+
+  #define STEP2_PIN 32
+  #define DIR2_PIN 33
+  #define ENA2_PIN 14
+
+  // Set this to LOW if your stepper driver enable pin is active low
+  // (most A4988/DRV8825 boards use LOW to enable the motor)
+  #define ENA_ACTIVE_LEVEL LOW
+
+  // ================= SENSORS =================
+  #define LDR_PIN 18
+  #define LDR_PIN2 5
+  #define LDR_PIN3 12
+  #define LDR_PIN4 13
+  #define RAIN_PIN 19
+
+  // ================= ACTUATORS =================
+  #define LED_PIN 23
+
+  // ================= VARIABLES =================
+  bool isOpen = false;
+  String lastCommand = "";
+
+  FirebaseData fbdo;
+  FirebaseConfig config;
+  FirebaseAuth auth;
+
+  unsigned long lastSendTime = 0;
+  const long SEND_INTERVAL = 3000;
+
+  unsigned long lastReadTime = 0;
+  const long READ_INTERVAL = 1000;
+
+  unsigned long lastModeReadTime = 0;
+  const long MODE_READ_INTERVAL = 2000;
+
+  unsigned long lastAutoCheckTime = 0;
+  const long AUTO_CHECK_INTERVAL = 2000;
+
+  bool isAutoMode = true;  // Start in auto mode
+
+  // ================= SETUP =================
+  void setup() {
+    Serial.begin(115200);
+    delay(1000);
+
+    dht.begin();
+
+    pinMode(STEP_PIN, OUTPUT);
+    pinMode(DIR_PIN, OUTPUT);
+    pinMode(ENA_PIN, OUTPUT);
+
+    pinMode(STEP2_PIN, OUTPUT);
+    pinMode(DIR2_PIN, OUTPUT);
+    pinMode(ENA2_PIN, OUTPUT);
+
+    pinMode(LDR_PIN, INPUT);
+    pinMode(RAIN_PIN, INPUT);
+    pinMode(LED_PIN, OUTPUT);
+
+    digitalWrite(ENA_PIN, !ENA_ACTIVE_LEVEL);
+    digitalWrite(ENA2_PIN, !ENA_ACTIVE_LEVEL);
+    digitalWrite(LED_PIN, HIGH);
+
+    Serial.println("\n=== ESP32 Umbrella System Starting ===");
+
+    // WIFI
+    WiFi.begin(ssid, password);
+    Serial.print("Connecting to WiFi");
+
+    int wifiAttempts = 0;
+    while (WiFi.status() != WL_CONNECTED && wifiAttempts < 20) {
+      Serial.print(".");
+      delay(500);
+      wifiAttempts++;
+    }
+
+    if (WiFi.status() == WL_CONNECTED) {
+      Serial.println("\n✅ WiFi Connected!");
+      Serial.println(WiFi.localIP());
+    } else {
+      Serial.println("\n❌ WiFi Connection Failed!");
+    }
+
+    // FIREBASE
+    config.database_url = DATABASE_URL;
+    config.signer.test_mode = true;
+
+    Firebase.reconnectNetwork(true);
+    fbdo.setBSSLBufferSize(4096, 1024);
+    fbdo.setResponseSize(2048);
+
+    Firebase.begin(&config, &auth);
+
+    Serial.println("🔥 Initializing Firebase...");
+    delay(2000);
+
+    // Wait for Firebase to be ready
+    int fbAttempts = 0;
+    while (!Firebase.ready() && fbAttempts < 20) {
+      Serial.print(".");
+      delay(500);
+      fbAttempts++;
+    }
+
+    if (Firebase.ready()) {
+      Serial.println("\n✅ Firebase Connected!");
+      if (!Firebase.RTDB.setString(&fbdo, "/umbrellaState", "CLOSED")) {
+        Serial.println("❌ Init setString failed: " + fbdo.errorReason());
+      }
+      if (!Firebase.RTDB.setString(&fbdo, "/control", "NONE")) {
+        Serial.println("❌ Init setString failed: " + fbdo.errorReason());
+      }
+      if (!Firebase.RTDB.setString(&fbdo, "/mode", "auto")) {
+        Serial.println("❌ Init setString failed: " + fbdo.errorReason());
+      }
+    } else {
+      Serial.println("\n❌ Firebase initialization failed!");
+      Serial.println("Error reason: " + fbdo.errorReason());
+    }
+  }
+
+  // ================= SEND SENSOR DATA =================
+  void sendSensorData() {
+    if (millis() - lastSendTime < SEND_INTERVAL) return;
+    lastSendTime = millis();
+
+    int lightRaw = digitalRead(LDR_PIN);
+    int rainRaw = digitalRead(RAIN_PIN);
+
+    float temp = dht.readTemperature();
+    float hum = dht.readHumidity();
+
+    String lightStatus = (lightRaw == LOW) ? "LIGHT PRESENT" : "NO LIGHT PRESENT";
+    String rainStatus = (rainRaw == LOW) ? "RAIN DETECTED" : "NO RAIN DETECTED";
+
+    Serial.println("\n📊 SENSOR DATA");
+    Serial.print("🌡 TEMP: "); Serial.println(temp);
+    Serial.print("💧 HUM: "); Serial.println(hum);
+    Serial.print("💡 LIGHT: "); Serial.println(lightStatus);
+    Serial.print("🌧 RAIN: "); Serial.println(rainStatus);
+
+    // 🔥 SEND TO FIREBASE
+    if (Firebase.ready()) {
+      Serial.println("🔥 Sending to Firebase...");
+
+      if (!isnan(temp)) {
+        if (!Firebase.RTDB.setFloat(&fbdo, "/temperature", temp)) {
+          Serial.println("❌ Temp Error: " + fbdo.errorReason());
+        }
+      }
+
+      if (!isnan(hum)) {
+        if (!Firebase.RTDB.setFloat(&fbdo, "/humidity", hum)) {
+          Serial.println("❌ Hum Error: " + fbdo.errorReason());
+        }
+      }
+
+      if (!Firebase.RTDB.setString(&fbdo, "/lightStatus", lightStatus)) {
+        Serial.println("❌ Light Error: " + fbdo.errorReason());
+      }
+
+      if (!Firebase.RTDB.setString(&fbdo, "/rainStatus", rainStatus)) {
+        Serial.println("❌ Rain Error: " + fbdo.errorReason());
+      }
+
+      Serial.println("✅ Send Attempt Done");
+    } else {
+      Serial.println("❌ Firebase not ready");
+    }
+  }
+
+  // ================= READ COMMAND (Manual Control) =================
+  void readCommand() {
+    if (millis() - lastReadTime < READ_INTERVAL) return;
+    lastReadTime = millis();
+
+    if (!Firebase.ready()) return;
+
+    if (Firebase.RTDB.getString(&fbdo, "/control")) {
+      String command = fbdo.stringData();
+
+      if (command != "NONE") {
+        Serial.print("📩 Command: ");
+        Serial.println(command);
+
+        if (command == "OPEN") {
+          openUmbrella();
+        }
+        else if (command == "CLOSE") {
+          closeUmbrella();
+        }
+        else if (command == "LED_ON") {
+          digitalWrite(LED_PIN, LOW);
+          Serial.println("💡 LED ON");
+        }
+        else if (command == "LED_OFF") {
+          digitalWrite(LED_PIN, HIGH);
+          Serial.println("💡 LED OFF");
+        }
+
+        // Reset command after execution so the same command can be sent again later
+        if (!Firebase.RTDB.setString(&fbdo, "/control", "NONE")) {
+          Serial.println("❌ Failed to clear command: " + fbdo.errorReason());
+        }
+        lastCommand = "NONE";
+      }
+    }
+  }
+
+  void readMode() {
+    if (millis() - lastModeReadTime < MODE_READ_INTERVAL) return;
+    lastModeReadTime = millis();
+
+    if (!Firebase.ready()) return;
+
+    if (Firebase.RTDB.getString(&fbdo, "/mode")) {
+      String mode = fbdo.stringData();
+      mode.toLowerCase();
+
+      bool newAutoMode = (mode == "auto");
+      if (newAutoMode != isAutoMode) {
+        isAutoMode = newAutoMode;
+        Serial.print("⚙️  Mode changed to: ");
+        Serial.println(mode);
+      }
+    }
+  }
+
+  // ================= AUTO MODE LOGIC =================
+  void autoModeLogic() {
+    if (millis() - lastAutoCheckTime < AUTO_CHECK_INTERVAL) return;
+    lastAutoCheckTime = millis();
+
+    int lightRaw = digitalRead(LDR_PIN);
+    int rainRaw = digitalRead(RAIN_PIN);
+
+    bool isLightPresent = (lightRaw == LOW);
+    bool isRaining = (rainRaw == LOW);
+
+    if (isRaining || isLightPresent) {
+      if (!isOpen) {
+        Serial.println("🤖 AUTO OPEN (Rain or Light Detected)");
+        openUmbrella();
+      }
+    } else {
+      if (isOpen) {
+        Serial.println("🤖 AUTO CLOSE (No Rain & No Light)");
+        closeUmbrella();
+      }
+    }
+  }
+
+  // ================= LOOP =================
+  void loop() {
+    sendSensorData();
+    readMode();
+
+    if (isAutoMode) {
+      autoModeLogic();
+    } else {
+      readCommand();
+    }
+
+    delay(500);
+  }
+
+  // ================= MOTOR FUNCTIONS =================
+  void openUmbrella() {
+    if (isOpen) {
+      Serial.println("⚠️  Already Open!");
+      return;
+    }
+
+    Serial.println("🔓 Opening Umbrella...");
+    digitalWrite(DIR_PIN, HIGH);
+    digitalWrite(DIR2_PIN, HIGH);
+    
+    digitalWrite(ENA_PIN, ENA_ACTIVE_LEVEL);
+    digitalWrite(ENA2_PIN, ENA_ACTIVE_LEVEL);
+    
+    runMotor(20000);
+    
+    digitalWrite(ENA_PIN, !ENA_ACTIVE_LEVEL);
+    digitalWrite(ENA2_PIN, !ENA_ACTIVE_LEVEL);
+    
+    isOpen = true;
+    Serial.println("✅ Umbrella Opened");
+
+    // Update Firebase
+    if (Firebase.ready()) {
+      Firebase.RTDB.setString(&fbdo, "/umbrellaState", "OPEN");
+    }
+  }
+
+  void closeUmbrella() {
+    if (!isOpen) {
+      Serial.println("⚠️  Already Closed!");
+      return;
+    }
+
+    Serial.println("🔒 Closing Umbrella...");
+    digitalWrite(DIR_PIN, LOW);
+    digitalWrite(DIR2_PIN, LOW);
+    
+    digitalWrite(ENA_PIN, ENA_ACTIVE_LEVEL);
+    digitalWrite(ENA2_PIN, ENA_ACTIVE_LEVEL);
+    
+    runMotor(20000);
+    
+    digitalWrite(ENA_PIN, !ENA_ACTIVE_LEVEL);
+    digitalWrite(ENA2_PIN, !ENA_ACTIVE_LEVEL);
+    
+    isOpen = false;
+    Serial.println("✅ Umbrella Closed");
+
+    // Update Firebase
+    if (Firebase.ready()) {
+      Firebase.RTDB.setString(&fbdo, "/umbrellaState", "CLOSED");
+    }
+  }
+
+  void runMotor(unsigned long duration) {
+    unsigned long start = millis();
+
+    while (millis() - start < duration) {
+      digitalWrite(STEP_PIN, HIGH);
+      digitalWrite(STEP2_PIN, HIGH);
+      delayMicroseconds(1500);
+      
+      digitalWrite(STEP_PIN, LOW);
+      digitalWrite(STEP2_PIN, LOW);
+      delayMicroseconds(1500);
+    }
+  }
+
+  // ================= FIREBASE DEBUG =================
+  void debugFirebaseStatus() {
+    if (Firebase.ready()) {
+      Serial.println("✅ Firebase Connected");
+    } else {
+      Serial.println("❌ Firebase Disconnected");
+    }
+  }
