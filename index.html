@@ -341,6 +341,47 @@
 
         .mode-btn:hover { transform: translateY(-1px); }
 
+        body.light-mode {
+            background: #edf2f7;
+            color: #0f172a;
+        }
+
+        body.light-mode::before {
+            background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.08) 0%, transparent 50%), radial-gradient(circle at 40% 20%, rgba(0, 217, 217, 0.05) 0%, transparent 50%);
+        }
+
+        body.light-mode .dashboard-inner,
+        body.light-mode .auth-card,
+        body.light-mode .dashboard-container {
+            background: rgba(255,255,255,0.92);
+            border-color: rgba(148,163,184,0.4);
+            color: #0f172a;
+        }
+
+        body.light-mode .dashboard-inner h1,
+        body.light-mode h3,
+        body.light-mode p,
+        body.light-mode span,
+        body.light-mode button {
+            color: #0f172a !important;
+        }
+
+        body.light-mode .mode-btn {
+            background: rgba(15, 23, 42, 0.05);
+            border-color: rgba(15, 23, 42, 0.12);
+            color: #0f172a;
+        }
+
+        body.light-mode .mode-btn.active {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #ffffff;
+        }
+
+        body.light-mode .toggle-switch .toggle-slider {
+            background: rgba(15, 23, 42, 0.35);
+        }
+
         .btn-control {
             width: 100%;
             margin-bottom: 12px;
@@ -783,7 +824,8 @@
                     <h1 style="font-size: clamp(1.3rem, 4vw, 2.2rem); color: #00d9d9; margin: 0; font-weight: 700;">🌂 Control Dashboard</h1>
                 </div>
                 <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-                    <button style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #00d9d9; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.9rem;"><i class="fas fa-moon"></i></button>
+                    <button id="lightModeBtn" onclick="setTheme('light')" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #00d9d9; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.9rem;">Light</button>
+                    <button id="darkModeBtn" onclick="setTheme('dark')" style="background: #00d9d9; border: 1px solid rgba(255,255,255,0.2); color: #0a0f1a; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.9rem;">Dark</button>
                     <span style="color: rgba(255,255,255,0.85); font-weight: 600;" id="signedInUser">User</span>
                     <button style="background: rgba(255,67,54,0.85); border: none; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 700;" onclick="logoutUser()">🔴 Logout</button>
                     <span id="espStatusPill" style="background: rgba(76,175,80,0.85); color: #fff; padding: 8px 16px; border-radius: 6px; font-weight: 700; font-size: 0.9rem;">🟢 ESP32 Online</span>
@@ -869,7 +911,7 @@
                             </label>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px; background: rgba(0, 217, 217, 0.08); border-radius: 6px;">
-                            <span style="color: #fff; font-weight: 600; font-size: 0.7rem;">Motor</span>
+                            <span style="color: #fff; font-weight: 600; font-size: 0.7rem;">Umbrella</span>
                             <label class="toggle-switch" style="margin: 0;">
                                 <input type="checkbox" id="umbrellaToggle" onchange="toggleUmbrella()">
                                 <span class="toggle-slider"></span>
@@ -1180,6 +1222,37 @@ auth.onAuthStateChanged((user) => {
             sendCommand(command);
             addActivityLogEntry(`LED switched ${toggle.checked ? 'ON' : 'OFF'}`);
         }
+
+        let currentTheme = localStorage.getItem('appTheme') || 'dark';
+
+        function applyTheme(theme) {
+            currentTheme = theme;
+            localStorage.setItem('appTheme', theme);
+            document.body.classList.toggle('light-mode', theme === 'light');
+            document.body.classList.toggle('dark-mode', theme === 'dark');
+
+            const lightBtn = document.getElementById('lightModeBtn');
+            const darkBtn = document.getElementById('darkModeBtn');
+            if (lightBtn && darkBtn) {
+                if (theme === 'light') {
+                    lightBtn.style.background = '#00d9d9';
+                    lightBtn.style.color = '#0a0f1a';
+                    darkBtn.style.background = 'rgba(255,255,255,0.1)';
+                    darkBtn.style.color = '#00d9d9';
+                } else {
+                    darkBtn.style.background = '#00d9d9';
+                    darkBtn.style.color = '#0a0f1a';
+                    lightBtn.style.background = 'rgba(255,255,255,0.1)';
+                    lightBtn.style.color = '#00d9d9';
+                }
+            }
+        }
+
+        function setTheme(theme) {
+            applyTheme(theme);
+        }
+
+        applyTheme(currentTheme);
 
         function toggleUmbrella() {
             const toggle = document.getElementById('umbrellaToggle');
