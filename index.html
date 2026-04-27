@@ -139,6 +139,69 @@
             background: rgba(0, 217, 217, 0.55);
         }
 
+        /* Light mode scrollbar styling */
+        body.light-mode,
+        body.light-mode .dashboard-inner,
+        body.light-mode #activityLog {
+            scrollbar-color: rgba(14, 165, 233, 0.4) rgba(241, 245, 249, 0.8);
+        }
+
+        body.light-mode::-webkit-scrollbar-track,
+        body.light-mode .dashboard-inner::-webkit-scrollbar-track,
+        body.light-mode #activityLog::-webkit-scrollbar-track {
+            background: rgba(241, 245, 249, 0.8);
+        }
+
+        body.light-mode::-webkit-scrollbar-thumb,
+        body.light-mode .dashboard-inner::-webkit-scrollbar-thumb,
+        body.light-mode #activityLog::-webkit-scrollbar-thumb {
+            background: rgba(14, 165, 233, 0.3);
+            border: 3px solid rgba(241, 245, 249, 0.8);
+        }
+
+        body.light-mode::-webkit-scrollbar-thumb:hover,
+        body.light-mode .dashboard-inner::-webkit-scrollbar-thumb:hover,
+        body.light-mode #activityLog::-webkit-scrollbar-thumb:hover {
+            background: rgba(14, 165, 233, 0.5);
+        }
+
+        /* Dark mode scrollbar styling */
+        body.dark-mode,
+        body.dark-mode .dashboard-inner,
+        body.dark-mode #activityLog {
+            scrollbar-color: rgba(0, 217, 217, 0.45) rgba(15, 23, 41, 0.85);
+        }
+
+        body.dark-mode::-webkit-scrollbar-track,
+        body.dark-mode .dashboard-inner::-webkit-scrollbar-track,
+        body.dark-mode #activityLog::-webkit-scrollbar-track {
+            background: rgba(15, 23, 41, 0.85);
+        }
+
+        body.dark-mode::-webkit-scrollbar-thumb,
+        body.dark-mode .dashboard-inner::-webkit-scrollbar-thumb,
+        body.dark-mode #activityLog::-webkit-scrollbar-thumb {
+            background: rgba(0, 217, 217, 0.35);
+            border: 3px solid rgba(15, 23, 41, 0.85);
+        }
+
+        body.dark-mode::-webkit-scrollbar-thumb:hover,
+        body.dark-mode .dashboard-inner::-webkit-scrollbar-thumb:hover,
+        body.dark-mode #activityLog::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 217, 217, 0.55);
+        }
+
+        /* Loading screen light mode */
+        body.light-mode #loadingScreen {
+            background: radial-gradient(circle at top, #f8fafc 0%, #e2e8f0 50%);
+            color: #0f172a;
+        }
+
+        body.light-mode #loadingScreen h2,
+        body.light-mode #loadingScreen p {
+            color: #0f172a;
+        }
+
         .auth-card {
             background: rgba(10, 24, 58, 0.95);
             border: 1px solid rgba(255,255,255,0.08);
@@ -1004,7 +1067,16 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <div class="auth-card" id="authScreen">
+        <!-- Loading Screen -->
+        <div id="loadingScreen" style="display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; position: fixed; top: 0; left: 0; background: radial-gradient(circle at top, #2a3d66 0%, #08112b 55%); z-index: 1000;">
+            <div style="text-align: center; color: #00d9d9;">
+                <div style="font-size: 4rem; margin-bottom: 20px;">🌂</div>
+                <h2 style="margin: 0 0 10px 0; font-size: 1.5rem;">Umbrella Shed Control</h2>
+                <p style="margin: 0; opacity: 0.8;">Loading...</p>
+            </div>
+        </div>
+
+        <div class="auth-card" id="authScreen" style="display: none;">
             <div style="display: flex; justify-content: center; align-items: center; width: 100%; padding: 20px;">
                 <div style="background: rgba(8, 25, 40, 0.95); border: 2px solid rgba(0, 217, 217, 0.3); border-radius: 24px; padding: 50px 40px; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);">
                     <!-- Theme Toggle Buttons -->
@@ -1080,7 +1152,7 @@
         </div>
     </div>
 
-    <div class="dashboard-container" id="appScreen">
+    <div class="dashboard-container" id="appScreen" style="display: none;">
         <div class="dashboard-inner">
             <!-- Header -->
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
@@ -1408,6 +1480,12 @@ function loginUser() {
 
         // ─── FIX: onAuthStateChanged now simply checks isAuthInProgress ───
 auth.onAuthStateChanged((user) => {
+    // Hide loading screen
+    const loadingScreen = document.getElementById('loadingScreen');
+    if (loadingScreen) {
+        loadingScreen.style.display = 'none';
+    }
+
     if (isLoginInProgress) return;
 
     if (user) {
