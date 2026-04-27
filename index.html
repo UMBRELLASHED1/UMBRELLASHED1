@@ -191,17 +191,6 @@
             background: rgba(0, 217, 217, 0.55);
         }
 
-        /* Loading screen light mode */
-        body.light-mode #loadingScreen {
-            background: radial-gradient(circle at top, #f8fafc 0%, #e2e8f0 50%);
-            color: #0f172a;
-        }
-
-        body.light-mode #loadingScreen h2,
-        body.light-mode #loadingScreen p {
-            color: #0f172a;
-        }
-
         .auth-card {
             background: rgba(10, 24, 58, 0.95);
             border: 1px solid rgba(255,255,255,0.08);
@@ -1067,15 +1056,6 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <!-- Loading Screen -->
-        <div id="loadingScreen" style="display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; position: fixed; top: 0; left: 0; background: radial-gradient(circle at top, #2a3d66 0%, #08112b 55%); z-index: 1000;">
-            <div style="text-align: center; color: #00d9d9;">
-                <div style="font-size: 4rem; margin-bottom: 20px;">🌂</div>
-                <h2 style="margin: 0 0 10px 0; font-size: 1.5rem;">Umbrella Shed Control</h2>
-                <p style="margin: 0; opacity: 0.8;">Loading...</p>
-            </div>
-        </div>
-
         <div class="auth-card" id="authScreen" style="display: none;">
             <div style="display: flex; justify-content: center; align-items: center; width: 100%; padding: 20px;">
                 <div style="background: rgba(8, 25, 40, 0.95); border: 2px solid rgba(0, 217, 217, 0.3); border-radius: 24px; padding: 50px 40px; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);">
@@ -1480,12 +1460,6 @@ function loginUser() {
 
         // ─── FIX: onAuthStateChanged now simply checks isAuthInProgress ───
 auth.onAuthStateChanged((user) => {
-    // Hide loading screen
-    const loadingScreen = document.getElementById('loadingScreen');
-    if (loadingScreen) {
-        loadingScreen.style.display = 'none';
-    }
-
     if (isLoginInProgress) return;
 
     if (user) {
