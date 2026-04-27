@@ -342,44 +342,100 @@
         .mode-btn:hover { transform: translateY(-1px); }
 
         body.light-mode {
-            background: #edf2f7;
+            background: radial-gradient(circle at top, #f8fafc 0%, #e2e8f0 50%);
             color: #0f172a;
         }
 
         body.light-mode::before {
-            background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.08) 0%, transparent 50%), radial-gradient(circle at 40% 20%, rgba(0, 217, 217, 0.05) 0%, transparent 50%);
+            background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.16) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%), radial-gradient(circle at 40% 20%, rgba(14, 165, 233, 0.08) 0%, transparent 50%);
+            opacity: 0.7;
         }
 
-        body.light-mode .dashboard-inner,
+        body.light-mode::after {
+            background: radial-gradient(ellipse at 30% 40%, rgba(56, 189, 248, 0.08) 0%, transparent 40%), radial-gradient(ellipse at 70% 60%, rgba(6, 182, 212, 0.06) 0%, transparent 40%);
+        }
+
         body.light-mode .auth-card,
-        body.light-mode .dashboard-container {
-            background: rgba(255,255,255,0.92);
-            border-color: rgba(148,163,184,0.4);
+        body.light-mode .dashboard-container,
+        body.light-mode .dashboard-inner {
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(148, 163, 184, 0.35);
             color: #0f172a;
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
         }
 
-        body.light-mode .dashboard-inner h1,
+        body.light-mode .auth-card .left-panel {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(34, 197, 94, 0.1));
+        }
+
+        body.light-mode .auth-card h2,
+        body.light-mode .auth-card p,
+        body.light-mode h1,
         body.light-mode h3,
-        body.light-mode p,
         body.light-mode span,
-        body.light-mode button {
+        body.light-mode label,
+        body.light-mode .toggle-switch,
+        body.light-mode .form-control {
             color: #0f172a !important;
         }
 
+        body.light-mode .auth-card p,
+        body.light-mode .app-header p,
+        body.light-mode .dashboard-container p {
+            color: rgba(15, 23, 42, 0.78) !important;
+        }
+
+        body.light-mode .form-control {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(148, 163, 184, 0.45);
+            color: #0f172a;
+        }
+
+        body.light-mode .form-control::placeholder {
+            color: rgba(15, 23, 42, 0.45);
+        }
+
+        body.light-mode .btn-primary {
+            background: #0284c7;
+            border-color: #0284c7;
+            color: #ffffff;
+        }
+
+        body.light-mode .btn-secondary {
+            background: #38bdf8;
+            border-color: #38bdf8;
+            color: #0f172a;
+        }
+
         body.light-mode .mode-btn {
-            background: rgba(15, 23, 42, 0.05);
+            background: rgba(15, 23, 42, 0.06);
             border-color: rgba(15, 23, 42, 0.12);
             color: #0f172a;
         }
 
         body.light-mode .mode-btn.active {
-            background: #2563eb;
-            border-color: #2563eb;
+            background: #0284c7;
+            border-color: #0284c7;
             color: #ffffff;
         }
 
         body.light-mode .toggle-switch .toggle-slider {
-            background: rgba(15, 23, 42, 0.35);
+            background: rgba(15, 23, 42, 0.12);
+        }
+
+        body.light-mode #activityLog div {
+            border-color: rgba(148, 163, 184, 0.3);
+            color: rgba(15, 23, 42, 0.85);
+        }
+
+        body.light-mode .status-indicator.active {
+            background: #0f766e;
+            box-shadow: 0 0 12px rgba(14, 165, 233, 0.25);
+        }
+
+        body.light-mode .status-indicator.inactive {
+            background: #ef4444;
+            box-shadow: 0 0 12px rgba(248, 113, 113, 0.25);
         }
 
         .btn-control {
