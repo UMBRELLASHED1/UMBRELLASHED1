@@ -1,3 +1,6 @@
+//RECENT index.html
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -111,10 +114,6 @@
             scrollbar-color: rgba(0, 217, 217, 0.45) rgba(15, 23, 41, 0.85);
         }
 
-        body.light-mode, body.light-mode .dashboard-inner, body.light-mode #activityLog {
-            scrollbar-color: rgba(14, 165, 233, 0.4) rgba(226, 232, 240, 0.8);
-        }
-
         body::-webkit-scrollbar,
         .dashboard-inner::-webkit-scrollbar,
         #activityLog::-webkit-scrollbar {
@@ -141,26 +140,6 @@
         .dashboard-inner::-webkit-scrollbar-thumb:hover,
         #activityLog::-webkit-scrollbar-thumb:hover {
             background: rgba(0, 217, 217, 0.55);
-        }
-
-        /* Light mode scrollbar styling */
-        body.light-mode::-webkit-scrollbar-track,
-        body.light-mode .dashboard-inner::-webkit-scrollbar-track,
-        body.light-mode #activityLog::-webkit-scrollbar-track {
-            background: rgba(226, 232, 240, 0.8);
-        }
-
-        body.light-mode::-webkit-scrollbar-thumb,
-        body.light-mode .dashboard-inner::-webkit-scrollbar-thumb,
-        body.light-mode #activityLog::-webkit-scrollbar-thumb {
-            background: rgba(14, 165, 233, 0.4);
-            border: 3px solid rgba(226, 232, 240, 0.8);
-        }
-
-        body.light-mode::-webkit-scrollbar-thumb:hover,
-        body.light-mode .dashboard-inner::-webkit-scrollbar-thumb:hover,
-        body.light-mode #activityLog::-webkit-scrollbar-thumb:hover {
-            background: rgba(14, 165, 233, 0.6);
         }
 
         .auth-card {
@@ -460,95 +439,22 @@
             background: rgba(255, 255, 255, 0.95);
             border-color: rgba(148, 163, 184, 0.45);
             color: #0f172a;
-            transition: all 0.3s ease;
-        }
-
-        body.light-mode .form-control:focus {
-            border-color: #0284c7;
-            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
-            outline: none;
         }
 
         body.light-mode .form-control::placeholder {
             color: rgba(15, 23, 42, 0.45);
         }
 
-        /* Interactive auth card buttons in light mode */
-        body.light-mode .auth-card button[style*="background: #00d9d9"],
-        body.light-mode .auth-card button[style*="background: none; border: none; color: #00d9d9"] {
-            transition: all 0.3s ease !important;
-            cursor: pointer !important;
-        }
-
-        body.light-mode .auth-card button[style*="background: #00d9d9"]:hover {
-            background: #0369a1 !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3) !important;
-        }
-
-        body.light-mode .auth-card button[style*="background: #00d9d9"]:active {
-            transform: translateY(0) !important;
-        }
-
-        body.light-mode .auth-card button[style*="background: none; border: none; color: #00d9d9"]:hover {
-            color: #0369a1 !important;
-            text-decoration-color: #0369a1 !important;
-        }
-
-        /* Interactive auth theme buttons in light mode */
-        body.light-mode #authLightModeBtn,
-        body.light-mode #authDarkModeBtn {
-            transition: all 0.3s ease !important;
-            cursor: pointer !important;
-        }
-
-        body.light-mode #authLightModeBtn:hover,
-        body.light-mode #authDarkModeBtn:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 4px 8px rgba(2, 132, 199, 0.2) !important;
-        }
-
-        body.light-mode #authLightModeBtn:active,
-        body.light-mode #authDarkModeBtn:active {
-            transform: translateY(0) !important;
-        }
-
         body.light-mode .btn-primary {
             background: #0284c7;
             border-color: #0284c7;
             color: #ffffff;
-            transition: all 0.3s ease;
-        }
-
-        body.light-mode .btn-primary:hover {
-            background: #0369a1;
-            border-color: #0369a1;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
-        }
-
-        body.light-mode .btn-primary:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 6px rgba(2, 132, 199, 0.2);
         }
 
         body.light-mode .btn-secondary {
             background: #38bdf8;
             border-color: #38bdf8;
             color: #0f172a;
-            transition: all 0.3s ease;
-        }
-
-        body.light-mode .btn-secondary:hover {
-            background: #0ea5e9;
-            border-color: #0ea5e9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
-        }
-
-        body.light-mode .btn-secondary:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 6px rgba(14, 165, 233, 0.2);
         }
 
         body.light-mode .mode-btn {
@@ -565,23 +471,6 @@
 
         body.light-mode .toggle-switch .toggle-slider {
             background: rgba(15, 23, 42, 0.12);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        body.light-mode .toggle-switch:hover .toggle-slider {
-            background: rgba(15, 23, 42, 0.2);
-            box-shadow: 0 2px 6px rgba(2, 132, 199, 0.2);
-        }
-
-        body.light-mode .toggle-switch input:checked + .toggle-slider {
-            background: #0284c7;
-            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
-        }
-
-        body.light-mode .toggle-switch input:checked + .toggle-slider:hover {
-            background: #0369a1;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
         }
 
         body.light-mode #activityLog div {
@@ -595,36 +484,11 @@
             background: rgba(241, 245, 249, 0.8) !important;
             border-color: rgba(148, 163, 184, 0.3) !important;
             color: #0f172a !important;
-            transition: all 0.3s ease !important;
-        }
-
-        body.light-mode button[style*="background: rgba(255,255,255,0.1)"]:hover,
-        body.light-mode button[style*="background: rgba(255,67,54,0.85)"]:hover {
-            background: rgba(226, 232, 240, 0.95) !important;
-            border-color: rgba(100, 116, 139, 0.5) !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1) !important;
-        }
-
-        body.light-mode button[style*="background: rgba(255,255,255,0.1)"]:active,
-        body.light-mode button[style*="background: rgba(255,67,54,0.85)"]:active {
-            transform: translateY(0) !important;
         }
 
         body.light-mode button[style*="background: rgba(76,175,80,0.85)"] {
             background: rgba(34, 197, 94, 0.9) !important;
             color: #ffffff !important;
-            transition: all 0.3s ease !important;
-        }
-
-        body.light-mode button[style*="background: rgba(76,175,80,0.85)"]:hover {
-            background: rgba(22, 163, 74, 0.95) !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3) !important;
-        }
-
-        body.light-mode button[style*="background: rgba(76,175,80,0.85)"]:active {
-            transform: translateY(0) !important;
         }
 
         /* Light mode for mode buttons */
@@ -632,32 +496,12 @@
             background: rgba(241, 245, 249, 0.8) !important;
             border-color: rgba(148, 163, 184, 0.3) !important;
             color: #0f172a !important;
-            transition: all 0.3s ease !important;
-            cursor: pointer !important;
-        }
-
-        body.light-mode .mode-btn:hover {
-            background: rgba(226, 232, 240, 0.95) !important;
-            border-color: rgba(100, 116, 139, 0.5) !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1) !important;
-        }
-
-        body.light-mode .mode-btn:active {
-            transform: translateY(0) !important;
         }
 
         body.light-mode .mode-btn.active {
             background: #0284c7 !important;
             border-color: #0284c7 !important;
             color: #ffffff !important;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3) !important;
-        }
-
-        body.light-mode .mode-btn.active:hover {
-            background: #0369a1 !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4) !important;
         }
 
         /* Dark mode specific styles to ensure proper dark theming */
@@ -1303,7 +1147,6 @@
 
         // ─── FIX: single flag that blocks onAuthStateChanged during active login/register ───
         let isAuthInProgress = false;
-        let isLoginInProgress = false;
 
         function generateDeviceId() {
             let deviceId = localStorage.getItem('deviceId');
