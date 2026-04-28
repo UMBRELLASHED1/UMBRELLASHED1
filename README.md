@@ -1,186 +1,127 @@
-# 🌂 Umbrella Shed - Smart IoT Control Dashboard
+# 🌂 Umbrella Shed — Smart IoT Umbrella Control
 
-A modern, responsive web application for controlling an automated umbrella shed with ESP32 rain sensors and real-time Firebase integration.
+A complete smart umbrella system combining ESP32 firmware, Firebase Realtime Database, and a responsive browser dashboard.
 
-**Live Dashboard:** https://cadanokenjii-ctrl.github.io/umbrella-shed/
+## What This Project Does
 
-## Features
+- Reads data from a DHT22 temperature/humidity sensor
+- Monitors 4x LDR light sensors and a rain sensor
+- Controls an umbrella stepper motor via ESP32
+- Sends live sensor updates to Firebase
+- Provides a responsive web dashboard with login, mode switching, and controls
+- Supports light/dark theme switching with matching scrollbar styling
 
-- 🌂 Real-time rain detection and automatic umbrella deployment
-- 📊 Live sensor monitoring (temperature, humidity, 4x LDR light sensors)
-- 🎛️ Manual and automatic control modes
-- 💡 LED lighting control
-- 🔐 Firebase Realtime Database authentication (one user at a time)
-- 📱 Fully responsive design (mobile, tablet, desktop)
-- 🎨 Modern UI with animated gradients
-- ⚡ Real-time updates with WebSocket
-- 🔴 ESP32 & Firebase connection status indicators
+## Key Features
 
-## System Architecture
+- 🌧 Rain-triggered umbrella deployment
+- 💡 Four LDR sensors for more accurate light detection
+- 🌡 Temperature and humidity monitoring
+- 🎛 Automatic and manual umbrella control modes
+- 🔴 LED actuator control
+- 🔐 Firebase Authentication and Realtime Database
+- 📱 Responsive dashboard for desktop, tablet, and mobile
+- 🎨 Modern UI with animated gradients and custom scrollbar themes
 
-```
-ESP32 (Microcontroller)
-  ├─ DHT22 (Temperature & Humidity)
-  ├─ 4x LDR Sensors (Light Detection)
-  ├─ Rain Sensor
-  ├─ 2x Stepper Motors (Umbrella Control)
-  └─ LED Actuator
-       ↓
-Firebase Realtime Database (Cloud)
-       ↓
-Web Dashboard (HTML/CSS/JavaScript)
-```
+## Files Included
 
-## Getting Started
+- `index.html` — Web dashboard, UI, theme switching, and Firebase interface
+- `SENSOR_CODE_LATEST_THESIS.ino` — ESP32 firmware and Firebase integration
+- `README.md` — Project overview and setup instructions
 
-### Prerequisites
+## Hardware Pin Mapping
 
-- A GitHub account with username: `cadanokenjii-ctrl`
-- Firebase project (already configured as "umbrellashednew")
-- ESP32 with WiFi capability
-
-### Live Access
-
-Simply visit: https://cadanokenjii-ctrl.github.io/umbrella-shed/
-
-**Login Information:**
-- Create an account on the dashboard
-- Only ONE user can be logged in at a time
-- Manual logout required to free up the system for next user
-
-### Local Testing
-
-1. Clone this repository:
-```bash
-git clone https://github.com/cadanokenjii-ctrl/umbrella-shed.git
-cd umbrella-shed
-```
-
-2. Open `index.html` in your browser
-
-## Firebase Configuration
-
-The system is connected to Firebase project: **umbrellashednew**
-
-**Database Structure:**
-```
-/temperature          - Current temperature (float)
-/humidity            - Current humidity (float)
-/lightStatus         - Light sensor status (string)
-/rainStatus          - Rain detection status (string)
-/umbrellaState       - Umbrella position (OPEN/CLOSED)
-/mode                - Control mode (auto/manual)
-/control             - Command queue (OPEN/CLOSE/LED_ON/LED_OFF)
-/system/currentUser  - Active user session (one at a time)
-/users/{uid}         - User account data
-```
-
-## Dashboard Features
-
-### Authentication
-- Email/password registration and login
-- One-account-at-a-time occupancy model
-- Account information display
-- Logout function to free up system
-
-### Real-Time Monitoring
-- Temperature and humidity readings
-- Light detection status
-- Rain detection status
-- Umbrella deployment state
-- ESP32 connection status
-- Firebase connection status
-
-### Control Options
-- **Auto Mode**: Automatically deploys umbrella when rain/light detected
-- **Manual Mode**: User-controlled deployment and retraction
-- LED toggle on/off
-- Activity log with timestamps
-
-## ESP32 Code
-
-The ESP32 code is included in: `SENSOR_CODE_LATEST_THESIS.ino`
-
-### Pin Configuration
-```
+```text
 DHT22 Sensor: GPIO 4
 LDR Sensor 1: GPIO 18
-LDR Sensor 2: GPIO 5
-LDR Sensor 3: GPIO 12
-LDR Sensor 4: GPIO 13
+LDR Sensor 2: GPIO 34
+LDR Sensor 3: GPIO 35
+LDR Sensor 4: GPIO 25
 Rain Sensor: GPIO 19
-LED: GPIO 23
-Motor 1 STEP: GPIO 25, DIR: GPIO 26, ENA: GPIO 27
-Motor 2 STEP: GPIO 32, DIR: GPIO 33, ENA: GPIO 14
+LED Output: GPIO 22
+Stepper STEP: GPIO 32
+Stepper DIR: GPIO 33
+Stepper ENA: GPIO 14
 ```
 
-### Compile Settings
-- Board: ESP32 Dev Module
-- Upload Speed: 921600
-- CPU Frequency: 240 MHz
+## About the ESP32 Firmware
 
-## Technical Stack
+- Uses `DHT.h` for temperature and humidity
+- Reads all four LDR sensors and derives a combined light state
+- Reads rain sensor state and updates Firebase in realtime
+- Sends sensor values every 3 seconds to Firebase
+- Initializes umbrella state and control flags in the database
+- Configured for a slow, high-torque stepper actuation mode
 
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript
-- **Backend**: Firebase Realtime Database + Authentication
-- **Hardware**: ESP32 microcontroller
-- **Hosting**: GitHub Pages (CDN)
-- **CSS Framework**: Bootstrap 5.3.0 (CDN)
-- **Icons**: Font Awesome 6.4.0 (CDN)
+## Getting Started Locally
 
-## How It Works
+1. Open this folder in your editor.
+2. Serve `index.html` with a local web server or open it directly in a browser.
+3. Flash `SENSOR_CODE_LATEST_THESIS.ino` to your ESP32 device.
+4. Ensure the ESP32 is connected to WiFi and Firebase.
+5. Log in on the dashboard and use the controls.
 
-1. **User Logs In** → System checks if anyone else is logged in
-2. **If Occupied** → Error message shown, user cannot proceed
-3. **If Vacant** → User redirected to control dashboard
-4. **Dashboard Loads** → Real-time listeners start for all sensors
-5. **Mode Selection** → Auto or Manual mode available
-6. **Controls Active** → User can deploy/retract umbrella or toggle LED
-7. **Page Reload** → User stays logged in (Firebase persistent auth)
-8. **Logout** → User removed from system, next person can login
+## Firebase Setup
 
-## Occupancy Model
+The ESP32 firmware is currently configured for the Firebase Realtime Database:
 
-- **One user at a time** - prevents conflicts
-- **Manual logout required** - user must click logout button
-- **Automatic cleanup** - Firebase stores who's currently using system
-- **No force logout** - admin cannot force others out
+- `umbrellashednew-default-rtdb.asia-southeast1.firebasedatabase.app`
 
-## Mobile Responsiveness
+### Main database paths
 
-- **Mobile** (320px-768px): Optimized touch controls, stacked layout
-- **Tablet** (769px-1024px): Two-column layout
-- **Desktop** (1025px+): Full multi-column dashboard
+```text
+/temperature
+/humidity
+/lightStatus
+/lightStatus1
+/lightStatus2
+/lightStatus3
+/lightStatus4
+/rainStatus
+/umbrellaState
+/mode
+/control
+```
+
+## Dashboard Capabilities
+
+- Login and registration screen
+- Auto/manual control toggles
+- Deploy all / retract all umbrella commands
+- LED on/off control
+- Live sensor status cards
+- ESP32 and Firebase connection status indicators
+- Activity log with timestamps
+- Light/dark theme switching with themed scrollbars
+
+## System Workflow
+
+1. User logs in to the dashboard.
+2. Dashboard listens for sensor and control updates from Firebase.
+3. ESP32 reads sensors and posts current values to Firebase.
+4. User selects auto or manual mode.
+5. User sends open/close/LED commands from the dashboard.
+6. ESP32 executes commands and updates state back to Firebase.
+
+## Design Notes
+
+- Single-user occupancy reduces control conflicts
+- Light/dark theme is built into the UI
+- Scrollbar styling adapts to the current theme
+- Optimized for thesis/demo workflows
+
+## Recommended Hardware Notes
+
+- Use a TB6600 or compatible stepper driver in full-step mode
+- Verify ENA pin polarity for your driver
+- Configure motor current safely for your stepper
 
 ## Project Status
 
-✅ **Completed:**
-- Frontend dashboard fully functional
-- Firebase integration working
-- Mobile responsive design
-- Authentication system
-- Real-time sensor data updates
-- Control command execution
-- Single occupancy model
-
-🚀 **Ready for Deployment**
+✅ Dashboard and firmware are implemented
+✅ Firebase integration is active
+✅ Four LDR sensors are integrated
+✅ Light/dark theme and custom scrollbar styling are complete
 
 ## License
 
-MIT License - Open source for academic projects
-
-## Support
-
-For issues or questions, please contact the developer.
-
-## Credits
-
-Built for **Thesis Project** with ❤️
-- Modern responsive UI
-- Real-time IoT integration
-- Professional dashboard design
-
----
-
-**GitHub:** https://github.com/cadanokenjii-ctrl/umbrella-shed
-**Website:** https://cadanokenjii-ctrl.github.io/umbrella-shed/
+MIT License
